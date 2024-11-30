@@ -1,0 +1,46 @@
+:root {
+  --o-text-primary-color: theme(colors.pink.500);
+
+  --o-btn-primary-text-color: white;
+  --o-btn-primary-bg-color: theme(colors.pink.500);
+  --o-btn-primary-bg-hover-color: theme(colors.pink.400);
+
+  --o-input-label-focus-color: theme(colors.pink.500);
+  --o-input-border-hover-color: theme(colors.pink.500);
+  --o-input-border-focus-color: theme(colors.pink.300);
+
+  --o-btn-cancel-border-hover-color: theme(colors.pink.400);
+
+  --o-dialog-header-bg-color: theme(colors.pink.500);
+  --o-dialog-header-btn-close-text-color: theme(colors.gray.700);
+  --o-dialog-header-btn-close-bg-color: theme(colors.pink.100);
+  --o-dialog-header-btn-close-bg-hover-color: theme(colors.pink.300);
+
+  --o-admin-menu-expanded-border-current-color: theme(colors.pink.300);
+  --o-admin-menu-item-bg-color: theme(colors.pink.50);
+
+  --o-btn-filter-text-hover-color: theme(colors.pink.400);
+
+  --o-otp-ring-active-color: theme(colors.pink.400);
+}
+
+.spinner_Uvk8 {
+  animation: spinner_otJF 1.6s cubic-bezier(0.52, 0.6, 0.25, 0.99) infinite;
+}
+.spinner_ypeD {
+  animation-delay: 0.2s;
+}
+.spinner_y0Rj {
+  animation-delay: 0.4s;
+}
+@keyframes spinner_otJF {
+  0% {
+    transform: translate(12px, 12px) scale(0);
+    opacity: 1;
+  }
+  75%,
+  100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0;
+  }
+}

@@ -1,11 +1,13 @@
-import { type ActionFunctionArgs } from 'react-router'
-import { and, eq, ne } from 'drizzle-orm'
+import { redirect, type ActionFunctionArgs } from 'react-router'
+import { and, eq } from 'drizzle-orm'
 
-import { ErrorMessage, ErrorTitle, Page } from '~/enums'
-import { dayjs } from '~/utils'
+import { CacheData, ErrorMessage, ErrorTitle, Page } from '~/enums'
 import { userTokenCookie } from '~/utils/cookie'
 import db from '~/db'
-import { sessionTable } from '~/db/schema'
+import { organizationPersonRoleTable } from '~/db/schema'
+import { verifyUserPermission, verifyUserToken } from '~/db/queries'
+import { organizationChangeValidation } from './change.validation'
+import { cache } from '~/utils'
 
 export const loader = () => {
   return new Response('Not Found', { status: 404 })
@@ -15,115 +17,47 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   if (request.method !== 'POST') {
     return new Response('Not Found', { status: 404 })
   }
+
+  const userToken = await userTokenCookie.parse(request.headers.get('Cookie'))
+  const verifiedUserToken = await verifyUserToken(userToken)
+  if (verifiedUserToken.serverError) {
+    return redirect(Page.LOGIN)
+  }
+
+  const currentUrl = new URL(request.url)
+  const pathname = currentUrl.pathname
+  const verifiedUserPermission = await verifyUserPermission(verifiedUserToken.roleId!, pathname)
+  if (verifiedUserPermission.serverError) {
+    return redirect(Page.ADMIN_WELCOME)
+  }
+
   const formData = await request.formData()
-  const code = String(formData.get('code'))
-  const timeLimit = Number(formData.get('timeLimit'))
+  const organizationId = String(formData.get('organizationId'))
+
   /* ▼ Validación de formulario */
-  // const validation = authCodeValidation({ timeLimit, code })
-  // if (Object.keys(validation.errors).length > 0) {
-  //   return validation
-  // }
+  const validation = organizationChangeValidation({ organizationId })
+  if (Object.keys(validation.errors).length > 0) {
+    return validation
+  }
   /* ▲ Validación de formulario */
-  let session
+
+  if (verifiedUserToken.organizationId === organizationId) {
+    return
+  }
+  let organizationQuery
   try {
-    const query = await db
-      .select({
-        id: sessionTable.id,
-        personId: sessionTable.personId,
-        codeExpiresAt: sessionTable.codeExpiresAt,
-        codeIsActive: sessionTable.codeIsActive,
-      })
-      .from(sessionTable)
-      .where(eq(sessionTable.code, code))
-    if (query.length === 0) {
-      if (process.env.NODE_ENV === 'development') {
-        console.error('Sesión no encontrada.')
-      }
-      return {
-        errors: {
-          server: {
-            title: ErrorTitle.SERVER_GENERIC,
-            message: ErrorMessage.SERVER_GENERIC,
-          },
-        },
-      }
-    }
-    session = query[0]
-  } catch (err) {
-    if (process.env.NODE_ENV === 'development') {
-      console.error('Error en DB. Obtener sesión.')
-      console.info(err)
-    }
-    return {
-      errors: {
-        server: {
-          title: ErrorTitle.SERVER_GENERIC,
-          message: ErrorMessage.SERVER_GENERIC,
-        },
-      },
-    }
-  }
-  if (session.codeIsActive === false) {
-    if (process.env.NODE_ENV === 'development') {
-      console.error('Sesión ya utilizada.')
-    }
-    return {
-      errors: {
-        server: {
-          title: ErrorTitle.SERVER_GENERIC,
-          message: ErrorMessage.SERVER_GENERIC,
-        },
-      },
-    }
-  }
-  if (dayjs.utc().isAfter(session.codeExpiresAt)) {
-    if (process.env.NODE_ENV === 'development') {
-      console.error('Sesión expirada.')
-    }
-    return {
-      errors: {
-        server: {
-          title: ErrorTitle.SERVER_GENERIC,
-          message: ErrorMessage.SERVER_GENERIC,
-        },
-      },
-    }
-  }
-  /* ↓ Desactivar código y activar sesión */
-  try {
-    await db
-      .update(sessionTable)
-      .set({ isActive: true, codeIsActive: false })
-      .where(eq(sessionTable.id, session.id))
-  } catch (err) {
-    if (process.env.NODE_ENV === 'development') {
-      console.error('Error en DB. Desactivar código y activar sesión.')
-      console.info(err)
-    }
-    return {
-      errors: {
-        server: {
-          title: ErrorTitle.SERVER_GENERIC,
-          message: ErrorMessage.SERVER_GENERIC,
-        },
-      },
-    }
-  }
-  /* ▼ Desactivar las sesiones activas del usuario que excedan las MAX_ACTIVE_SESSIONS más nuevas */
-  let sessions
-  try {
-    sessions = await db
-      .select({ id: sessionTable.id })
-      .from(sessionTable)
+    organizationQuery = await db
+      .select({ isSelected: organizationPersonRoleTable.isSelected })
+      .from(organizationPersonRoleTable)
       .where(
         and(
-          and(ne(sessionTable.id, session.id), eq(sessionTable.isActive, true)),
-          eq(sessionTable.personId, session.personId),
+          eq(organizationPersonRoleTable.organizationId, organizationId),
+          eq(organizationPersonRoleTable.personId, verifiedUserToken.userId!),
         ),
       )
   } catch (err) {
     if (process.env.NODE_ENV === 'development') {
-      console.error('Error en DB. Consulta de sesiones a desactivar.')
+      console.error('Error en DB. Cambiar de organización.')
       console.info(err)
     }
     return {
@@ -135,34 +69,71 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       },
     }
   }
-  if (sessions.length > parseInt(process.env.MAX_ACTIVE_SESSIONS ?? '1')) {
-    try {
-      await db
-        .update(sessionTable)
-        .set({ isActive: false })
-        .where(eq(sessionTable.id, sessions[parseInt(process.env.MAX_ACTIVE_SESSIONS ?? '1')].id))
-    } catch (err) {
-      if (process.env.NODE_ENV === 'development') {
-        console.error('Error en DB. Desactivar la sesión activa número MAX_ACTIVE_SESSIONS + 1.')
-        console.info(err)
-      }
-      return {
-        errors: {
-          server: {
-            title: ErrorTitle.SERVER_GENERIC,
-            message: ErrorMessage.SERVER_GENERIC,
-          },
+  if (organizationQuery.length === 0) {
+    if (process.env.NODE_ENV === 'development') {
+      console.error('El usuario no pertenece a la organización que desea cambiarse.')
+    }
+    return {
+      errors: {
+        server: {
+          title: ErrorTitle.SERVER_GENERIC,
+          message: 'El usuario no pertenece a la organización que desea cambiarse.',
         },
-      }
+      },
     }
   }
-  /* ▲ Desactivar las sesiones activas del usuario que excedan las MAX_ACTIVE_SESSIONS más nuevas */
-  const cookieValue = await userTokenCookie.serialize(session.id)
-  return new Response(null, {
-    status: 302 /* Redirección */,
-    headers: {
-      'Set-Cookie': cookieValue /* Configurar la cookie */,
-      Location: Page.ADMIN_WELCOME /* URL de redirección */,
-    },
-  })
+  try {
+    await db
+      .update(organizationPersonRoleTable)
+      .set({ isSelected: true })
+      .where(
+        and(
+          eq(organizationPersonRoleTable.organizationId, organizationId),
+          eq(organizationPersonRoleTable.personId, verifiedUserToken.userId!),
+        ),
+      )
+  } catch (err) {
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Error en DB. Actualización de nueva selección usuario-organización.')
+      console.info(err)
+    }
+    return {
+      errors: {
+        server: {
+          title: ErrorTitle.SERVER_GENERIC,
+          message: ErrorMessage.SERVER_GENERIC,
+        },
+      },
+    }
+  }
+  try {
+    await db
+      .update(organizationPersonRoleTable)
+      .set({ isSelected: false })
+      .where(
+        and(
+          eq(organizationPersonRoleTable.organizationId, organizationId),
+          eq(organizationPersonRoleTable.personId, verifiedUserToken.userId!),
+        ),
+      )
+  } catch (err) {
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Error en DB. Actualización de vieja selección usuario-organización.')
+      console.info(err)
+    }
+    return {
+      errors: {
+        server: {
+          title: ErrorTitle.SERVER_GENERIC,
+          message: ErrorMessage.SERVER_GENERIC,
+        },
+      },
+    }
+  }
+  cache.delete(JSON.stringify({ data: CacheData.PERMISSIONS, roleId: verifiedUserToken.roleId }))
+  cache.delete(JSON.stringify({ data: CacheData.MENU, roleId: verifiedUserToken.roleId }))
+  cache.delete(
+    JSON.stringify({ data: CacheData.ORGANIZATIONS_TO_CHANGE, userId: verifiedUserToken.userId }),
+  )
+  return redirect(Page.ADMIN_WELCOME)
 }

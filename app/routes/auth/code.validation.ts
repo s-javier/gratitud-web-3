@@ -20,8 +20,5 @@ export const authCodeValidation = (data: {
   if (codeErr.issues) {
     errors.code = codeErr.issues[0].message
   }
-  if (Object.keys(errors).length > 0) {
-    return { errors }
-  }
   return { errors }
 }

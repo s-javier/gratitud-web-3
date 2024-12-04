@@ -14,8 +14,5 @@ export const authLoginValidation = (data: { email: string }): { errors: { email?
   if (emailErr.issues) {
     errors.email = emailErr.issues[0].message
   }
-  if (Object.keys(errors).length > 0) {
-    return { errors }
-  }
   return { errors }
 }

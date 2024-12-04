@@ -1,12 +1,19 @@
+import { useEffect } from 'react'
 import { useFetcher } from 'react-router'
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button } from '@nextui-org/react'
 import { Icon } from '@iconify/react'
 
 import { Api } from '~/enums'
-import { useUserStore } from '~/stores'
+import { useLoaderOverlayStore, useUserStore } from '~/stores'
 
 export default function OrganizationsMenu() {
+  const setLoaderOverlay = useLoaderOverlayStore((state) => state.setLoaderOverlay)
   const organizationsToChange = useUserStore((state) => state.organizationsToChange)
+  const fetcher = useFetcher()
+
+  useEffect(() => {
+    setLoaderOverlay(fetcher.state !== 'idle')
+  }, [fetcher])
 
   return (
     <Dropdown placement="bottom-end">
@@ -24,35 +31,21 @@ export default function OrganizationsMenu() {
         {organizationsToChange
           .filter((item: any) => !item.isSelected)
           .map((element: any) => (
-            // <DropdownItem
-            //   textValue={`Organización ${element.title}`}
-            //   key={element.id}
-            //   startContent={<Icon icon="mdi:business" width="100%" className="w-5 text-gray-500" />}
-            // >
-            //   <FetcherItem {...element} />
-            // </DropdownItem>
-            <FetcherItem key={element.id} {...element} />
+            <DropdownItem
+              textValue={`Organización ${element.title}`}
+              key={element.id}
+              startContent={<Icon icon="mdi:business" width="100%" className="w-5 text-gray-500" />}
+              onClick={() => {
+                console.log('H')
+                const formData = new FormData()
+                formData.append('organizationId', element.id)
+                fetcher.submit(formData, { method: 'post', action: Api.ORGANIZATION_CHANGE })
+              }}
+            >
+              {element.title}
+            </DropdownItem>
           ))}
       </DropdownMenu>
     </Dropdown>
-  )
-}
-
-function FetcherItem(props: { id: string; title: string }) {
-  const fetcher = useFetcher()
-
-  return (
-    <DropdownItem
-      textValue={`Organización ${props.title}`}
-      startContent={<Icon icon="mdi:business" width="100%" className="w-5 text-gray-500" />}
-      onClick={() => {
-        console.log('H')
-        const formData = new FormData()
-        formData.append('organizationId', props.id)
-        fetcher.submit(formData, { method: 'post', action: Api.ORGANIZATION_CHANGE })
-      }}
-    >
-      {props.title}
-    </DropdownItem>
   )
 }

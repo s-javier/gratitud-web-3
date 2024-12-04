@@ -1,5 +1,5 @@
 import { redirect, type ActionFunctionArgs } from 'react-router'
-import { and, eq } from 'drizzle-orm'
+import { and, eq, ne } from 'drizzle-orm'
 
 import { CacheData, ErrorMessage, ErrorTitle, Page } from '~/enums'
 import { userTokenCookie } from '~/utils/cookie'
@@ -83,6 +83,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     }
   }
   try {
+    // console.log(organizationId)
     await db
       .update(organizationPersonRoleTable)
       .set({ isSelected: true })
@@ -112,7 +113,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       .set({ isSelected: false })
       .where(
         and(
-          eq(organizationPersonRoleTable.organizationId, organizationId),
+          ne(organizationPersonRoleTable.organizationId, organizationId),
           eq(organizationPersonRoleTable.personId, verifiedUserToken.userId!),
         ),
       )

@@ -64,6 +64,7 @@ export default function AuthLoginRoute() {
         label="Email"
         fullWidth
         sx={MUITextFieldStyle}
+        className="mb-8"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         error={emailErrMsg ? true : false}

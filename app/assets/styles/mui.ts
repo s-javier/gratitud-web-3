@@ -1,7 +1,6 @@
 import colors from 'tailwindcss/colors'
 
 export const MUITextFieldStyle = {
-  marginBottom: '2rem',
   '.MuiOutlinedInput-root': {
     fieldset: {
       borderColor: colors.gray[700],

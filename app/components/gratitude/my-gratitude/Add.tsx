@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom'
 import { Button } from '@nextui-org/react'
 
 import { cn } from '~/utils/cn'
-import AddEdit from './AddEdit'
+import AddEdit from '../../../routes/gratitude/my/AddEdit'
 
 export default function GratitudeMyAdd(props: { userId: string }) {
   const [isClient, setIsClient] = useState(false)

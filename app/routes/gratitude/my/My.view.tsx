@@ -11,7 +11,7 @@ import Thank from '~/components/gratitude/Thank'
 import TableActions from '~/components/shared/TableActions'
 import Add from '~/components/gratitude/my-gratitude/Add'
 import Info from '~/components/gratitude/my-gratitude/Info'
-import AddEdit from '~/components/gratitude/my-gratitude/AddEdit'
+import AddEdit from '~/routes/gratitude/my/AddEdit'
 
 export const loader = async ({ context }: LoaderFunctionArgs) => {
   const userInfo = (await context.middleware) as UserInfo | 'error'

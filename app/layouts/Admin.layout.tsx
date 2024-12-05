@@ -106,7 +106,6 @@ export default function AdminLayout() {
   const setUser = useUserStore((state) => state.setUser)
 
   useEffect(() => {
-    console.log(loader)
     if (loader?.serverError) {
       toast.error(loader.serverError.title, {
         description: loader.serverError.message || undefined,

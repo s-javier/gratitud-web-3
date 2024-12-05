@@ -1,14 +1,15 @@
 import { useEffect, useRef, useState } from 'react'
 import { useFetcher } from 'react-router'
-import { Button, Input, Textarea } from '@nextui-org/react'
+import { Button, TextField } from '@mui/material'
 import { toast } from 'sonner'
 
 import { Api, ErrorTitle } from '~/enums'
 import { useLoaderOverlayStore } from '~/stores'
 import { cn } from '~/utils/cn'
-import { gratitudeCreateValidation } from '~/utils/validations'
+// import { gratitudeCreateValidation } from '~/utils/validations'
 import Overlay from '~/components/shared/Overlay'
 import Dialog from '~/components/shared/Dialog'
+import { MUITextFieldStyle } from '~/assets/styles/mui'
 
 export default function GratitudeMyAddEdit(props: {
   type: string
@@ -30,12 +31,11 @@ export default function GratitudeMyAddEdit(props: {
       server?: { title: string; message: string }
     }
   }>()
-  const formRef = useRef(null)
+  const formRef = useRef<HTMLFormElement>(null)
 
   useEffect(() => {
     /* ↓ Para editar */
-    if (props.data) {
-      console.log(props.data)
+    if (props.data && Object.keys(props.data).length > 0) {
       setTitle(props.data.title)
       setTitleErrMsg('')
       setDescription(props.data.description)
@@ -80,7 +80,7 @@ export default function GratitudeMyAddEdit(props: {
           <>
             <Button
               type="button"
-              variant="faded"
+              // variant="faded"
               className={cn(
                 '!text-gray-700 !border-gray-300 hover:!bg-gray-50',
                 'hover:!border-[var(--o-btn-cancel-border-hover-color)]',
@@ -97,15 +97,15 @@ export default function GratitudeMyAddEdit(props: {
                 'uppercase',
               )}
               onClick={() => {
-                const validationErrors = gratitudeCreateValidation({
-                  title: title || undefined,
-                  description,
-                })
-                if (Object.keys(validationErrors.errors).length > 0) {
-                  setTitleErrMsg(validationErrors.errors.title || '')
-                  setDescriptionErrMsg(validationErrors.errors.description || '')
-                  return
-                }
+                // const validationErrors = gratitudeCreateValidation({
+                //   title: title || undefined,
+                //   description,
+                // })
+                // if (Object.keys(validationErrors.errors).length > 0) {
+                //   setTitleErrMsg(validationErrors.errors.title || '')
+                //   setDescriptionErrMsg(validationErrors.errors.description || '')
+                //   return
+                // }
                 const formData = new FormData(formRef.current || undefined)
                 formData.append('userId', props.userId)
                 formData.append('isMaterialized', 'true')
@@ -122,53 +122,39 @@ export default function GratitudeMyAddEdit(props: {
           <p className="">A continuación puedese agregar un agradecimiento.</p>
           <p className="text-sm text-gray-400">(*) Campos obligatorios.</p>
         </div>
-        <fetcher.Form
-          method="post"
-          className="space-y-4"
-          ref={formRef}
-          action={Api.GRATITUDE_CREATE}
-        >
-          <Input
+        <div className="space-y-4">
+          <TextField
             name="title"
             type="text"
             label="Título"
-            className=""
-            classNames={{
-              inputWrapper: [
-                'border-gray-400 border-[1px]',
-                'hover:!border-[var(--o-input-border-hover-color)]',
-                'group-data-[focus=true]:border-[var(--o-input-border-hover-color)]',
-              ],
-            }}
-            size="lg"
-            variant="bordered"
+            fullWidth
+            sx={MUITextFieldStyle}
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            isInvalid={titleErrMsg ? true : false}
-            errorMessage={titleErrMsg}
+            error={titleErrMsg ? true : false}
+            helperText={titleErrMsg}
             onFocus={() => setTitleErrMsg('')}
           />
-          <Textarea
+          <TextField
             name="description"
             type="text"
+            multiline
             label="Descripción*"
-            className=""
-            classNames={{
-              inputWrapper: [
-                'border-gray-400 border-[1px]',
-                'hover:!border-[var(--o-input-border-hover-color)]',
-                'group-data-[focus=true]:border-[var(--o-input-border-hover-color)]',
-              ],
-            }}
-            size="lg"
-            variant="bordered"
+            fullWidth
+            sx={MUITextFieldStyle}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            isInvalid={descriptionErrMsg ? true : false}
-            errorMessage={descriptionErrMsg}
+            error={descriptionErrMsg ? true : false}
+            helperText={descriptionErrMsg}
             onFocus={() => setDescriptionErrMsg('')}
           />
-        </fetcher.Form>
+        </div>
+        <fetcher.Form
+        // method="post"
+        // className="space-y-4"
+        // ref={formRef}
+        // action={Api.GRATITUDE_CREATE}
+        ></fetcher.Form>
       </Dialog>
     </Overlay>
   )

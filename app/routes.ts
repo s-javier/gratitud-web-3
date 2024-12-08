@@ -13,6 +13,7 @@ export default [
   layout('./layouts/Admin.layout.tsx', [
     route(Page.ADMIN_WELCOME.slice(1), './routes/admin/Welcome.view.tsx'),
     route(Page.GRATITUDE_MY_GRATITUDES.slice(1), './routes/gratitude/my/My.view.tsx'),
+    route(Page.GRATITUDE_REMEMBER.slice(1), './routes/gratitude/remember/Remember.view.tsx'),
   ]),
   route(Api.ORGANIZATION_CHANGE.slice(1), './routes/admin/organization/change.api.tsx'),
 ] satisfies RouteConfig

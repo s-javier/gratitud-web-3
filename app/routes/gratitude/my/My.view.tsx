@@ -26,7 +26,7 @@ export const meta: MetaFunction = () => {
   return [{ title: 'Mis agradecimientos | Gratitud' }, { name: 'description', content: '' }]
 }
 
-export default function AdminMyGratitudesRoute() {
+export default function GratitudeMyRoute() {
   const loader = useLoaderData<{
     serverError?: { title: string; message: string }
     userInfo?: UserInfo

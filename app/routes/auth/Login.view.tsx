@@ -57,14 +57,13 @@ export default function AuthLoginRoute() {
   }, [fetcher])
 
   return (
-    <fetcher.Form method="post" action={Api.AUTH_SIGN_IN_EMAIL}>
+    <fetcher.Form method="post" action={Api.AUTH_SIGN_IN_EMAIL} className="space-y-8">
       <TextField
         name="email"
         // type="email"
         label="Email"
         fullWidth
         sx={MUITextFieldStyle}
-        className="mb-8"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         error={emailErrMsg ? true : false}

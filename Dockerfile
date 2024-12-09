@@ -1,12 +1,12 @@
 FROM node:20-alpine AS development-dependencies-env
 COPY . /app
 WORKDIR /app
-RUN npm i
+RUN npm i --force
 
 FROM node:20-alpine AS production-dependencies-env
 COPY ./package.json /app/
 WORKDIR /app
-RUN npm i --omit=dev
+RUN npm i --omit=dev --force
 
 FROM node:20-alpine AS build-env
 COPY . /app/

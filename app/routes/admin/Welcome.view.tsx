@@ -1,10 +1,12 @@
-import { MetaFunction } from 'react-router'
+import { type MetaFunction } from 'react-router'
+
+import { General } from '~/enums'
 import AdminHeader from '~/components/admin/AdminHeader'
 import AdminMain from '~/components/admin/AdminMain'
 import Notebook from '~/components/svg/Notebook'
 
 export const meta: MetaFunction = () => {
-  return [{ title: 'Bienvenido/a | Gratitud' }, { name: 'description', content: '' }]
+  return [{ title: `Bienvenido/a | ${General.TITLE}` }, { name: 'description', content: '' }]
 }
 
 export default function AdminWelcomeRoute() {

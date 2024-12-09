@@ -128,7 +128,7 @@ export default function AdminLayout() {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="grow">
+      <div className="grow bg-gray-50">
         <Outlet />
       </div>
       <div className="flex-none">

@@ -27,7 +27,7 @@
     "input-otp": "1.4.1",
     "isbot": "5.1.17",
     "lru-cache": "11.0.2",
-    "material-react-table": "3.0.1",
+    "material-react-table": "3.0.2",
     "motion": "11.13.1",
     "nanoid": "5.0.9",
     "nodemailer": "6.9.16",

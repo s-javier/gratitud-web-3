@@ -14,7 +14,7 @@
     "@mui/icons-material": "6.1.10",
     "@mui/material": "6.1.10",
     "@mui/x-date-pickers": "7.23.1",
-    "@nextui-org/react": "2.6.4",
+    "@nextui-org/react": "2.6.5",
     "@react-router/node": "7.0.2",
     "@react-router/serve": "7.0.2",
     "clsx": "2.1.1",

@@ -1,4 +1,4 @@
-import { Button } from '@nextui-org/react'
+import { Button } from '@mui/material'
 
 import { cn } from '~/utils/cn'
 import Overlay from '~/components/shared/Overlay'
@@ -17,7 +17,7 @@ export default function GratitudeInfo(props: {
         footer={
           <Button
             type="button"
-            variant="faded"
+            variant="outlined"
             className={cn(
               'm-auto',
               '!text-gray-700 !border-gray-300 hover:!bg-gray-50',

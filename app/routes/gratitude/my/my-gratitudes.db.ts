@@ -8,7 +8,7 @@ import { cache } from '~/utils/cache'
 export const getMyGratitudesFromDB = async (
   userId: string,
 ): Promise<{
-  serverError?: { title: string; message: string }
+  errors?: { server: { title: string; message: string } }
   myGratitudes?: {
     id: string
     title: string | null
@@ -37,9 +37,11 @@ export const getMyGratitudesFromDB = async (
       console.info(err)
     }
     return {
-      serverError: {
-        title: ErrorTitle.SERVER_GENERIC,
-        message: 'No se pudo obtener las gratitudes del usuario.',
+      errors: {
+        server: {
+          title: ErrorTitle.SERVER_GENERIC,
+          message: 'No se pudo obtener las gratitudes del usuario.',
+        },
       },
     }
   }

@@ -1,10 +1,11 @@
 import * as v from 'valibot'
 
-export const gratitudeCreateValidation = (data: {
-  title: string | undefined
+export const gratitudeCreateUpdateValidation = (input: {
+  title?: string
   description: string
+  isMaterialized?: boolean
 }): { errors: { title?: string; description?: string } } => {
-  const errors: { title?: string; description?: string } = {}
+  const errors: { title?: string; description?: string; isMaterialized?: string } = {}
   const titleErr = v.safeParse(
     v.optional(
       v.pipe(
@@ -15,7 +16,7 @@ export const gratitudeCreateValidation = (data: {
         v.maxLength(100, 'Escribe menos.'),
       ),
     ),
-    data.title,
+    input.title,
   )
   if (titleErr.issues) {
     errors.title = titleErr.issues[0].message
@@ -28,13 +29,17 @@ export const gratitudeCreateValidation = (data: {
       v.minLength(4, 'Escribe un poco más.'),
       v.maxLength(400, 'Escribe menos.'),
     ),
-    data.description,
+    input.description,
   )
   if (descriptionErr.issues) {
     errors.description = descriptionErr.issues[0].message
   }
-  if (Object.keys(errors).length > 0) {
-    return { errors }
+  const isMaterializedErr = v.safeParse(
+    v.optional(v.pipe(v.boolean('El valor de este campo es inválido.'))),
+    input.isMaterialized,
+  )
+  if (isMaterializedErr.issues) {
+    errors.isMaterialized = isMaterializedErr.issues[0].message
   }
   return { errors }
 }

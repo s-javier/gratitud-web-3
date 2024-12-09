@@ -1,1 +1,0 @@
-ALTER TABLE "gratitude" ADD COLUMN "is_materialized" boolean DEFAULT true NOT NULL;

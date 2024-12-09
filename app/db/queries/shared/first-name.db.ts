@@ -19,7 +19,7 @@ export const getFirstNameFromDB = async (
   let query
   try {
     query = await db
-      .select({ name: personTable.name })
+      .select({ firstName: personTable.firstName })
       .from(personTable)
       .where(eq(personTable.id, userId))
   } catch (err) {
@@ -45,7 +45,7 @@ export const getFirstNameFromDB = async (
       },
     }
   }
-  firstName = query[0].name
+  firstName = query[0].firstName
   cache.set(JSON.stringify({ data: CacheData.FIRST_NAME, userId }), firstName)
   return { firstName }
 }

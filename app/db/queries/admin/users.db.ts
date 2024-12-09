@@ -11,7 +11,7 @@ export const getUsersAllFromDB = async () => {
     users = await db
       .select({
         id: personTable.id,
-        name: personTable.name,
+        firstName: personTable.firstName,
         email: personTable.email,
         isActive: personTable.isActive,
       })

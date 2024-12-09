@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
+// @ts-ignore
 import { createPortal } from 'react-dom'
-import { Button } from '@nextui-org/react'
+import { Button } from '@mui/material'
 
-import { cn } from '~/utils/cn'
-import AddEdit from '../../../routes/gratitude/my/AddEdit'
+import AddEdit from './AddEdit'
+import { MUIBtnStyle } from '~/assets/styles/mui'
 
 export default function GratitudeMyAdd(props: { userId: string }) {
   const [isClient, setIsClient] = useState(false)
@@ -17,13 +18,9 @@ export default function GratitudeMyAdd(props: { userId: string }) {
     <>
       <Button
         type="button"
-        size="sm"
-        className={cn(
-          'w-full',
-          'text-[var(--o-btn-primary-text-color)]',
-          'bg-[var(--o-btn-primary-bg-color)]',
-          'uppercase text-sm',
-        )}
+        variant="contained"
+        size="small"
+        sx={MUIBtnStyle}
         onClick={() => setIsDialogOpen(true)}
       >
         Agregar

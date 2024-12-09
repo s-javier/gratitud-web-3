@@ -1,21 +1,11 @@
 import { relations } from 'drizzle-orm'
-import {
-  boolean,
-  integer,
-  pgEnum,
-  pgTable,
-  primaryKey,
-  text,
-  timestamp,
-  uuid,
-  varchar,
-} from 'drizzle-orm/pg-core'
+import { boolean, integer, pgEnum, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core'
 
 export const personTable = pgTable('person', {
   id: uuid().defaultRandom().primaryKey(),
-  name: varchar('name', { length: 100 }).notNull(),
-  // nickname: varchar('nickname', { length: 50 }).notNull().unique(),
-  email: varchar({ length: 255 }).notNull().unique(),
+  firstName: text('first_name').notNull(),
+  lastName: text('last_name'),
+  email: text().notNull().unique(),
   isActive: boolean('is_active').notNull().default(false),
   deletedAt: timestamp('deleted_at', { withTimezone: true }),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
@@ -36,11 +26,11 @@ export const personTableRelations = relations(personTable, ({ many }) => ({
 export const sessionTable = pgTable('session', {
   id: uuid().defaultRandom().primaryKey(),
   personId: uuid('person_id')
-    .references(() => personTable.id)
+    .references(() => personTable.id, { onDelete: 'cascade' })
     .notNull(),
   isActive: boolean('is_active').notNull().default(false),
   expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
-  code: varchar({ length: 50 }).notNull(),
+  code: text().notNull(),
   codeIsActive: boolean('code_is_active').notNull().default(false),
   codeExpiresAt: timestamp('code_expires_at', { withTimezone: true }).notNull(),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
@@ -58,7 +48,7 @@ export const sessionTableRelations = relations(sessionTable, ({ one }) => ({
 
 export const roleTable = pgTable('role', {
   id: uuid().defaultRandom().primaryKey(),
-  title: varchar({ length: 50 }).notNull().unique(),
+  title: text().notNull().unique(),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true })
     .defaultNow()
@@ -72,7 +62,7 @@ export const roleTableRelations = relations(roleTable, ({ many }) => ({
 
 export const organizationTable = pgTable('organization', {
   id: uuid().defaultRandom().primaryKey(),
-  title: varchar({ length: 100 }).notNull().unique(),
+  title: text().notNull().unique(),
   isActive: boolean('is_active').notNull().default(false),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true })
@@ -84,27 +74,24 @@ export const organizationTableRelations = relations(organizationTable, ({ many }
   organizationPersonRole: many(organizationPersonRoleTable),
 }))
 
-export const organizationPersonRoleTable = pgTable(
-  'organization_person_role',
-  {
-    organizationId: uuid('organization_id')
-      .references(() => organizationTable.id, { onDelete: 'cascade' })
-      .notNull(),
-    personId: uuid('person_id')
-      .references(() => personTable.id, { onDelete: 'cascade' })
-      .notNull(),
-    roleId: uuid('role_id')
-      .references(() => roleTable.id, { onDelete: 'cascade' })
-      .notNull(),
-    isSelected: boolean('is_selected').notNull().default(false),
-    isVisible: boolean('is_visible').notNull().default(false),
-    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
-    updatedAt: timestamp('updated_at', { withTimezone: true })
-      .defaultNow()
-      .$onUpdate(() => new Date()),
-  },
-  (t) => [primaryKey({ columns: [t.organizationId, t.personId, t.roleId] })],
-)
+export const organizationPersonRoleTable = pgTable('organization_person_role', {
+  id: uuid().defaultRandom().primaryKey(),
+  organizationId: uuid('organization_id')
+    .references(() => organizationTable.id, { onDelete: 'cascade' })
+    .notNull(),
+  personId: uuid('person_id')
+    .references(() => personTable.id, { onDelete: 'cascade' })
+    .notNull(),
+  roleId: uuid('role_id')
+    .references(() => roleTable.id, { onDelete: 'cascade' })
+    .notNull(),
+  isSelected: boolean('is_selected').notNull().default(false),
+  isVisible: boolean('is_visible').notNull().default(false),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true })
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+})
 
 export const organizationPersonRoleTableRelations = relations(
   organizationPersonRoleTable,
@@ -128,7 +115,7 @@ export const permissionTypeEnum = pgEnum('permission_type', ['api', 'view'])
 
 export const permissionTable = pgTable('permission', {
   id: uuid().defaultRandom().primaryKey(),
-  path: varchar({ length: 100 }).notNull().unique(),
+  path: text().notNull().unique(),
   type: permissionTypeEnum(),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true })
@@ -141,23 +128,20 @@ export const permissionTableRelations = relations(permissionTable, ({ one, many 
   rolePermission: many(rolePermissionTable),
 }))
 
-export const rolePermissionTable = pgTable(
-  'role_permission',
-  {
-    roleId: uuid('role_id')
-      .references(() => roleTable.id, { onDelete: 'cascade' })
-      .notNull(),
-    permissionId: uuid('permission_id')
-      .references(() => permissionTable.id, { onDelete: 'cascade' })
-      .notNull(),
-    sort: integer(),
-    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
-    updatedAt: timestamp('updated_at', { withTimezone: true })
-      .defaultNow()
-      .$onUpdate(() => new Date()),
-  },
-  (t) => [primaryKey({ columns: [t.roleId, t.permissionId] })],
-)
+export const rolePermissionTable = pgTable('role_permission', {
+  id: uuid().defaultRandom().primaryKey(),
+  roleId: uuid('role_id')
+    .references(() => roleTable.id, { onDelete: 'cascade' })
+    .notNull(),
+  permissionId: uuid('permission_id')
+    .references(() => permissionTable.id, { onDelete: 'cascade' })
+    .notNull(),
+  sort: integer(),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true })
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+})
 
 export const rolePermissionTableRelations = relations(rolePermissionTable, ({ one }) => ({
   role: one(roleTable, {
@@ -175,8 +159,8 @@ export const menupageTable = pgTable('menupage', {
   permissionId: uuid('permission_id')
     .references(() => permissionTable.id, { onDelete: 'set null' })
     .notNull(),
-  title: varchar({ length: 50 }).notNull(),
-  icon: varchar({ length: 50 }),
+  title: text().notNull(),
+  icon: text(),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true })
     .defaultNow()
@@ -199,9 +183,9 @@ export const menupageTableRelations = relations(menupageTable, ({ one }) => ({
 export const gratitudeTable = pgTable('gratitude', {
   id: uuid().defaultRandom().primaryKey(),
   personId: uuid('person_id')
-    .references(() => personTable.id)
+    .references(() => personTable.id, { onDelete: 'cascade' })
     .notNull(),
-  title: varchar({ length: 100 }),
+  title: text(),
   description: text().notNull(),
   isRemind: boolean('is_remind').default(false).notNull(),
   remindedAt: timestamp('reminded_at', { withTimezone: true }).$onUpdate(() => new Date()),
@@ -223,9 +207,9 @@ export const gratitudeTableRelations = relations(gratitudeTable, ({ one, many })
 export const tagTable = pgTable('tag', {
   id: uuid().defaultRandom().primaryKey(),
   personId: uuid('person_id')
-    .references(() => personTable.id)
+    .references(() => personTable.id, { onDelete: 'cascade' })
     .notNull(),
-  title: varchar({ length: 50 }).notNull(),
+  title: text().notNull(),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true })
     .defaultNow()
@@ -240,22 +224,19 @@ export const tagTableRelations = relations(tagTable, ({ one, many }) => ({
   gratitudeTag: many(gratitudeTagTable),
 }))
 
-export const gratitudeTagTable = pgTable(
-  'gratitude_tag',
-  {
-    gratitudeId: uuid('gratitude_id')
-      .references(() => gratitudeTable.id)
-      .notNull(),
-    tagId: uuid('tag_id')
-      .references(() => tagTable.id)
-      .notNull(),
-    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
-    updatedAt: timestamp('updated_at', { withTimezone: true })
-      .defaultNow()
-      .$onUpdate(() => new Date()),
-  },
-  (t) => [primaryKey({ columns: [t.gratitudeId, t.tagId] })],
-)
+export const gratitudeTagTable = pgTable('gratitude_tag', {
+  id: uuid().defaultRandom().primaryKey(),
+  gratitudeId: uuid('gratitude_id')
+    .references(() => gratitudeTable.id, { onDelete: 'cascade' })
+    .notNull(),
+  tagId: uuid('tag_id')
+    .references(() => tagTable.id, { onDelete: 'cascade' })
+    .notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true })
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+})
 
 export const gratitudeTagTableRelations = relations(gratitudeTagTable, ({ one }) => ({
   gratitude: one(gratitudeTable, {

@@ -3,7 +3,7 @@ import colors from 'tailwindcss/colors'
 export const MUITextFieldStyle = {
   '.MuiOutlinedInput-root': {
     fieldset: {
-      borderColor: colors.gray[700],
+      borderColor: colors.gray[400],
     },
     '&:hover fieldset': {
       borderColor: 'var(--o-input-border-hover-color)',

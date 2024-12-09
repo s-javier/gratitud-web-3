@@ -4,19 +4,28 @@ import { toast } from 'sonner'
 import { Input } from '@nextui-org/react'
 
 import { UserInfo } from '~/types'
-import { getMyGratitudesFromDB } from '~/db/queries'
+import { ErrorMessage, ErrorTitle } from '~/enums'
+import { getMyGratitudesFromDB } from './my-gratitudes.db'
 import AdminHeader from '~/components/admin/AdminHeader'
 import AdminMain from '~/components/admin/AdminMain'
-import Thank from '~/components/gratitude/Thank'
+import Thank from '~/routes/gratitude/Thank'
 import TableActions from '~/components/shared/TableActions'
-import Add from '~/components/gratitude/my-gratitude/Add'
-import Info from '~/components/gratitude/my-gratitude/Info'
+import Add from '~/routes/gratitude/my/Add'
+import Info from '~/routes/gratitude/my/Info'
 import AddEdit from '~/routes/gratitude/my/AddEdit'
+import Delete from '~/routes/gratitude/my/Delete'
 
 export const loader = async ({ context }: LoaderFunctionArgs) => {
   const userInfo = (await context.middleware) as UserInfo | 'error'
   if (userInfo === 'error') {
-    return {}
+    return {
+      errors: {
+        server: {
+          title: ErrorTitle.SERVER_GENERIC,
+          message: ErrorMessage.SERVER_GENERIC,
+        },
+      },
+    }
   }
   const myGratitudes = await getMyGratitudesFromDB(userInfo.userId)
   return { userInfo, ...myGratitudes }
@@ -28,7 +37,7 @@ export const meta: MetaFunction = () => {
 
 export default function GratitudeMyRoute() {
   const loader = useLoaderData<{
-    serverError?: { title: string; message: string }
+    errors?: { server: { title: string; message: string } }
     userInfo?: UserInfo
     myGratitudes?: {
       id: string
@@ -46,9 +55,9 @@ export default function GratitudeMyRoute() {
   const [filteredItems, setFilteredItems] = useState(loader.myGratitudes || [])
 
   useEffect(() => {
-    if (loader?.serverError) {
-      toast.error(loader.serverError.title, {
-        description: loader.serverError.message || undefined,
+    if (loader?.errors?.server) {
+      toast.error(loader.errors.server.title, {
+        description: loader.errors.server.message || undefined,
         duration: 5000,
       })
       return
@@ -73,6 +82,16 @@ export default function GratitudeMyRoute() {
         type="edit"
         isShow={isEditOpen}
         close={() => setIsEditOpen(false)}
+        data={{
+          id: gratitude.id,
+          title: gratitude.title || '',
+          description: gratitude.description || '',
+        }}
+        userId={loader.userInfo?.userId || ''}
+      />
+      <Delete
+        isShow={isDeleteOpen}
+        close={() => setIsDeleteOpen(false)}
         data={gratitude}
         userId={loader.userInfo?.userId || ''}
       />

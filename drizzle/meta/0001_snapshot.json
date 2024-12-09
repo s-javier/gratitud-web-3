@@ -1,6 +1,6 @@
 {
-  "id": "252717a8-532a-4b70-a35c-aa260c22f93b",
-  "prevId": "4abd84a3-2e17-4463-aafe-a5935e5ddbdb",
+  "id": "88abe125-f228-4f60-b324-26f791717cbd",
+  "prevId": "3ede04a2-7481-42fa-9058-eba03d35bd0e",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -23,7 +23,7 @@
         },
         "title": {
           "name": "title",
-          "type": "varchar(100)",
+          "type": "text",
           "primaryKey": false,
           "notNull": false
         },
@@ -46,11 +46,18 @@
           "primaryKey": false,
           "notNull": false
         },
+        "is_materialized": {
+          "name": "is_materialized",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        },
         "created_at": {
           "name": "created_at",
           "type": "timestamp with time zone",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": "now()"
         },
         "updated_at": {
@@ -73,18 +80,27 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
-      "checkConstraints": {}
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
     "public.gratitude_tag": {
       "name": "gratitude_tag",
       "schema": "",
       "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
         "gratitude_id": {
           "name": "gratitude_id",
           "type": "uuid",
@@ -124,7 +140,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         },
         "gratitude_tag_tag_id_tag_id_fk": {
@@ -137,24 +153,18 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {
-        "gratitude_tag_gratitude_id_tag_id_pk": {
-          "name": "gratitude_tag_gratitude_id_tag_id_pk",
-          "columns": [
-            "gratitude_id",
-            "tag_id"
-          ]
-        }
-      },
+      "compositePrimaryKeys": {},
       "uniqueConstraints": {},
-      "checkConstraints": {}
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
-    "public.menu_page": {
-      "name": "menu_page",
+    "public.menupage": {
+      "name": "menupage",
       "schema": "",
       "columns": {
         "id": {
@@ -172,20 +182,13 @@
         },
         "title": {
           "name": "title",
-          "type": "varchar(50)",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "sort": {
-          "name": "sort",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "default": 0
-        },
         "icon": {
           "name": "icon",
-          "type": "varchar(50)",
+          "type": "text",
           "primaryKey": false,
           "notNull": false
         },
@@ -206,9 +209,9 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "menu_page_permission_id_permission_id_fk": {
-          "name": "menu_page_permission_id_permission_id_fk",
-          "tableFrom": "menu_page",
+        "menupage_permission_id_permission_id_fk": {
+          "name": "menupage_permission_id_permission_id_fk",
+          "tableFrom": "menupage",
           "tableTo": "permission",
           "columnsFrom": [
             "permission_id"
@@ -216,18 +219,27 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "set null",
           "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
-      "checkConstraints": {}
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
     "public.organization_person_role": {
       "name": "organization_person_role",
       "schema": "",
       "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
         "organization_id": {
           "name": "organization_id",
           "type": "uuid",
@@ -287,7 +299,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         },
         "organization_person_role_person_id_person_id_fk": {
@@ -300,7 +312,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         },
         "organization_person_role_role_id_role_id_fk": {
@@ -313,22 +325,15 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {
-        "organization_person_role_organization_id_person_id_role_id_pk": {
-          "name": "organization_person_role_organization_id_person_id_role_id_pk",
-          "columns": [
-            "organization_id",
-            "person_id",
-            "role_id"
-          ]
-        }
-      },
+      "compositePrimaryKeys": {},
       "uniqueConstraints": {},
-      "checkConstraints": {}
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
     "public.organization": {
       "name": "organization",
@@ -343,7 +348,7 @@
         },
         "title": {
           "name": "title",
-          "type": "varchar(100)",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
@@ -381,7 +386,9 @@
           ]
         }
       },
-      "checkConstraints": {}
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
     "public.permission": {
       "name": "permission",
@@ -396,7 +403,7 @@
         },
         "path": {
           "name": "path",
-          "type": "varchar(100)",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
@@ -425,8 +432,18 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {}
+      "uniqueConstraints": {
+        "permission_path_unique": {
+          "name": "permission_path_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "path"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
     "public.person": {
       "name": "person",
@@ -439,15 +456,21 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
-        "name": {
-          "name": "name",
-          "type": "varchar(100)",
+        "first_name": {
+          "name": "first_name",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
+        "last_name": {
+          "name": "last_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
         "email": {
           "name": "email",
-          "type": "varchar(255)",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
@@ -491,12 +514,21 @@
           ]
         }
       },
-      "checkConstraints": {}
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
     "public.role_permission": {
       "name": "role_permission",
       "schema": "",
       "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
         "role_id": {
           "name": "role_id",
           "type": "uuid",
@@ -508,6 +540,12 @@
           "type": "uuid",
           "primaryKey": false,
           "notNull": true
+        },
+        "sort": {
+          "name": "sort",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
         },
         "created_at": {
           "name": "created_at",
@@ -536,7 +574,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         },
         "role_permission_permission_id_permission_id_fk": {
@@ -549,21 +587,15 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {
-        "role_permission_role_id_permission_id_pk": {
-          "name": "role_permission_role_id_permission_id_pk",
-          "columns": [
-            "role_id",
-            "permission_id"
-          ]
-        }
-      },
+      "compositePrimaryKeys": {},
       "uniqueConstraints": {},
-      "checkConstraints": {}
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
     "public.role": {
       "name": "role",
@@ -578,7 +610,7 @@
         },
         "title": {
           "name": "title",
-          "type": "varchar(50)",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
@@ -609,7 +641,9 @@
           ]
         }
       },
-      "checkConstraints": {}
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
     "public.session": {
       "name": "session",
@@ -643,7 +677,7 @@
         },
         "code": {
           "name": "code",
-          "type": "varchar(50)",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
@@ -687,13 +721,15 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
-      "checkConstraints": {}
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
     "public.tag": {
       "name": "tag",
@@ -714,7 +750,7 @@
         },
         "title": {
           "name": "title",
-          "type": "varchar(50)",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
@@ -745,13 +781,15 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
-      "checkConstraints": {}
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     }
   },
   "enums": {
@@ -766,6 +804,8 @@
   },
   "schemas": {},
   "sequences": {},
+  "roles": {},
+  "policies": {},
   "views": {},
   "_meta": {
     "columns": {},

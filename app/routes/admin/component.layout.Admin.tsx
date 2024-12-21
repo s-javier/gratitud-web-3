@@ -10,13 +10,11 @@ import { toast } from 'sonner'
 
 import { Page } from '~/enums'
 import { userTokenCookie } from '~/utils/cookie'
-import {
-  verifyUserToken,
-  verifyUserPermission,
-  getMenuFromDB,
-  getFirstNameFromDB,
-  getOrganizationsToChangeFromDB,
-} from '~/db/queries'
+import { verifyUserToken } from '~/routes/admin/db.verify-user-token'
+import { verifyUserPermission } from '~/routes/admin/db.verify-user-permission'
+import { getMenuFromDB } from '~/routes/admin/db.menu'
+import { getFirstNameFromDB } from '~/routes/admin/db.first-name'
+import { getOrganizationsToChangeFromDB } from '~/routes/organization/change/db.to-change'
 import { useUserStore, useLoaderOverlayStore } from '~/stores'
 import Footer from '~/components/Footer'
 
@@ -40,7 +38,10 @@ export const loader = async ({ context, request }: LoaderFunctionArgs) => {
   const currentUrl = new URL(request.url)
   const pathname = currentUrl.pathname
   if (pathname !== Page.ADMIN_WELCOME) {
-    const verifiedUserPermission = await verifyUserPermission(verifiedUserToken.roleId!, pathname)
+    const verifiedUserPermission = await verifyUserPermission({
+      roleId: verifiedUserToken.roleId!,
+      path: pathname,
+    })
     if (verifiedUserPermission.serverError) {
       middlewareResolve('error')
       return redirect(Page.ADMIN_WELCOME)

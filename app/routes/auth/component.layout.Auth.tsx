@@ -4,7 +4,8 @@ import { type LoaderFunctionArgs, Outlet, redirect, useNavigation } from 'react-
 import { Page } from '~/enums'
 import { useLoaderOverlayStore } from '~/stores'
 import { userTokenCookie } from '~/utils/cookie'
-import { verifyUserToken } from '~/db/queries'
+import { verifyUserToken } from '~/routes/admin/db.verify-user-token'
+import Logo from '~/components/svg/Logo'
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const userToken = await userTokenCookie.parse(request.headers.get('Cookie'))
@@ -27,11 +28,7 @@ export default function AuthLayout() {
     <div className="min-h-full flex items-center justify-center bg-gray-50">
       <div className="flex flex-col items-center gap-12 pt-10 pb-16">
         <header className="flex flex-col items-center gap-9">
-          {/* ↓ Logo */}
-          <div className="h-[144px] w-[434px]">
-            <img src="/logo-light.png" alt="Remix" className="block w-full dark:hidden" />
-            <img src="/logo-dark.png" alt="Remix" className="hidden w-full dark:block" />
-          </div>
+          <Logo className="w-[280px]" />
           <h1 className="leading text-2xl font-bold text-gray-800 dark:text-gray-100">
             Ingresa a tu cuenta
           </h1>

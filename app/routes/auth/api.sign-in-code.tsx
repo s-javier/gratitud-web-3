@@ -1,8 +1,8 @@
 import { type ActionFunctionArgs } from 'react-router'
 import { and, eq, ne } from 'drizzle-orm'
+import { isAfter } from 'date-fns'
 
 import { ErrorMessage, ErrorTitle, Page } from '~/enums'
-import { dayjs } from '~/utils'
 import { userTokenCookie } from '~/utils/cookie'
 import db from '~/db'
 import { sessionTable } from '~/db/schema'
@@ -77,7 +77,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       },
     }
   }
-  if (dayjs.utc().isAfter(session.codeExpiresAt)) {
+  /*
+   * dayjs.utc().isAfter(session.codeExpiresAt)
+   * new Date(): La fecha actual en JavaScript ya está en UTC por defecto
+   */
+  if (isAfter(new Date(), session.codeExpiresAt)) {
     if (process.env.NODE_ENV === 'development') {
       console.error('Sesión expirada.')
     }

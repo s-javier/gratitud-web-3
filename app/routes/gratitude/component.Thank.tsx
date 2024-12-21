@@ -1,6 +1,7 @@
 import { ReactNode } from 'react'
 import { twMerge } from 'tailwind-merge'
-import dayjs from 'dayjs'
+import { format } from 'date-fns'
+import { es } from 'date-fns/locale'
 
 export default function Thank(props: { index: number; item: any; children?: ReactNode }) {
   return (
@@ -18,7 +19,7 @@ export default function Thank(props: { index: number; item: any; children?: Reac
           </h3>
           <p className="text-gray-700 mb-2">{props.item.description}</p>
           <p className="text-xs text-gray-500 text-right">
-            {dayjs(props.item.createdAt).format('DD [ de] MMM [de] YY')}
+            {format(new Date(props.item.createdAt), "dd 'de' MMM 'de' yy", { locale: es })}
           </p>
         </div>
         {props.children}

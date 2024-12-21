@@ -5,7 +5,8 @@ import { CacheData, ErrorMessage, ErrorTitle, Page } from '~/enums'
 import { userTokenCookie } from '~/utils/cookie'
 import db from '~/db'
 import { organizationPersonRoleTable } from '~/db/schema'
-import { verifyUserPermission, verifyUserToken } from '~/db/queries'
+import { verifyUserPermission } from '~/routes/admin/db.verify-user-permission'
+import { verifyUserToken } from '~/routes/admin/db.verify-user-token'
 import { organizationChangeValidation } from './validation.change'
 import { cache } from '~/utils'
 
@@ -26,7 +27,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   const currentUrl = new URL(request.url)
   const pathname = currentUrl.pathname
-  const verifiedUserPermission = await verifyUserPermission(verifiedUserToken.roleId!, pathname)
+  const verifiedUserPermission = await verifyUserPermission({
+    roleId: verifiedUserToken.roleId!,
+    path: pathname,
+  })
   if (verifiedUserPermission.serverError) {
     return redirect(Page.ADMIN_WELCOME)
   }

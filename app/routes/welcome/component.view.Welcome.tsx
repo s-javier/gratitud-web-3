@@ -1,8 +1,8 @@
 import { type MetaFunction } from 'react-router'
 
 import { General } from '~/enums'
-import AdminHeader from '~/components/admin/AdminHeader'
-import AdminMain from '~/components/admin/AdminMain'
+import AdminHeader from '~/routes/admin/component.AdminHeader'
+import AdminMain from '~/routes/admin/component.AdminMain'
 import Notebook from '~/components/svg/Notebook'
 
 export const meta: MetaFunction = () => {

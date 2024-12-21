@@ -6,8 +6,8 @@ import { toast } from 'sonner'
 import { Api, ErrorMessage, ErrorTitle } from '~/enums'
 import { useLoaderOverlayStore } from '~/stores'
 import { cn } from '~/utils/cn'
-import Overlay from '~/components/shared/Overlay'
-import Dialog from '~/components/shared/Dialog'
+import Overlay from '~/components/Overlay'
+import Dialog from '~/components/Dialog'
 
 export default function GratitudeDelete(props: {
   isShow: boolean

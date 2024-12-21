@@ -8,7 +8,7 @@ import { ErrorMessage, ErrorTitle } from '~/enums'
 import db from '~/db'
 import { personTable, sessionTable } from '~/db/schema'
 import { dayjs } from '~/utils'
-import { authLoginValidation } from './login.validation'
+import { authLoginValidation } from './validation.login'
 
 export const loader = () => {
   return new Response('Not Found', { status: 404 })

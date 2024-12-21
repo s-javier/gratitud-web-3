@@ -16,3 +16,14 @@ export const userTokenCookie = createCookie('token', {
   /* ↓ Segundos. 5 días - 10 minutos */
   maxAge: Number(process.env.SESSION_DAYS) * 24 * 60 * 60 - 10 * 60,
 })
+
+export const deleteUserTokenCookie = createCookie('token', {
+  domain:
+    process.env.NODE_ENV === 'development'
+      ? 'localhost'
+      : (process.env.PUBLIC_BASE_URL?.split('https://')[1] ?? ''),
+  path: '/',
+  httpOnly: true,
+  secure: process.env.NODE_ENV === 'development' ? false : true,
+  sameSite: 'strict',
+})

@@ -18,7 +18,7 @@ import {
   getOrganizationsToChangeFromDB,
 } from '~/db/queries'
 import { useUserStore, useLoaderOverlayStore } from '~/stores'
-import Footer from '~/components/shared/Footer'
+import Footer from '~/components/Footer'
 
 export const loader = async ({ context, request }: LoaderFunctionArgs) => {
   let response

@@ -5,7 +5,7 @@ import { toast } from 'sonner'
 
 import { Api, General, Page } from '~/enums'
 import { useIsCodeSentStore, useLoaderOverlayStore } from '~/stores'
-import { authLoginValidation } from './login.validation'
+import { authLoginValidation } from './validation.login'
 import { MUITextFieldStyle, MUIBtnStyle } from '~/assets/styles/mui'
 
 export const meta: MetaFunction = () => {

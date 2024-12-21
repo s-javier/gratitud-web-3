@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { Button } from '@mui/material'
 
-import AddEdit from './AddEdit'
+import AddEdit from './component.AddEdit'
 import { MUIBtnStyle } from '~/assets/styles/mui'
 
 export default function GratitudeMyAdd(props: { userId: string }) {

@@ -7,7 +7,7 @@ import { toast } from 'sonner'
 import { Api, General, Page } from '~/enums'
 import { useIsCodeSentStore, useLoaderOverlayStore } from '~/stores'
 import { cn } from '~/utils/cn'
-import { authCodeValidation } from './code.validation'
+import { authCodeValidation } from './validation.code'
 
 export const meta: MetaFunction = () => {
   return [

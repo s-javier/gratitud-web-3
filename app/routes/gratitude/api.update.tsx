@@ -1,7 +1,7 @@
 import { type ActionFunctionArgs } from 'react-router'
 
-import { gratitudeCreateUpdateValidation } from './create-update.validation'
-import { gratitudeCreateFromDB } from './create.db'
+import { gratitudeCreateUpdateValidation } from './validation.create-update'
+import { gratitudeUpdateFromDB } from './db.update'
 
 export const loader = () => {
   return new Response('Not Found', { status: 404 })
@@ -13,6 +13,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   }
 
   const formData = await request.formData()
+  const id = String(formData.get('id'))
   const title = formData.has('title') ? String(formData.get('title')) : undefined
   const description = String(formData.get('description'))
   const isMaterialized = Boolean(formData.get('isMaterialized'))
@@ -25,7 +26,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   }
   /* ▲ Validación de formulario */
 
-  const result = await gratitudeCreateFromDB({ title, description, isMaterialized }, userId)
+  const result = await gratitudeUpdateFromDB({ id, title, description, isMaterialized }, userId)
   if (result?.errors?.server) {
     return result
   }

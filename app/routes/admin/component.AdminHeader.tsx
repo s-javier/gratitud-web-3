@@ -4,9 +4,9 @@ import { useShallow } from 'zustand/react/shallow'
 import { useUserStore } from '~/stores'
 import { cn } from '~/utils/cn'
 import Logo from '~/components/svg/Logo'
-import UserMenu from '~/components/admin/UserMenu'
+import UserMenu from '~/routes/admin/component.UserMenu'
 import { ReactNode } from 'react'
-import OrganizationsMenu from './OrganizationsMenu'
+import OrganizationsMenu from './component.OrganizationsMenu'
 
 export default function AdminHeader(props: { title: ReactNode; buttons: ReactNode }) {
   const location = useLocation()

@@ -1,8 +1,8 @@
 import { Button } from '@mui/material'
 
 import { cn } from '~/utils/cn'
-import Overlay from '~/components/shared/Overlay'
-import Dialog from '~/components/shared/Dialog'
+import Overlay from '~/components/Overlay'
+import Dialog from '~/components/Dialog'
 
 export default function GratitudeInfo(props: {
   isShow: boolean

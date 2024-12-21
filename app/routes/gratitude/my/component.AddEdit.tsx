@@ -6,10 +6,10 @@ import { toast } from 'sonner'
 import { Api, ErrorTitle } from '~/enums'
 import { useLoaderOverlayStore } from '~/stores'
 import { cn } from '~/utils/cn'
-import Overlay from '~/components/shared/Overlay'
-import Dialog from '~/components/shared/Dialog'
+import Overlay from '~/components/Overlay'
+import Dialog from '~/components/Dialog'
 import { MUIBtnStyle, MUITextFieldStyle } from '~/assets/styles/mui'
-import { gratitudeCreateUpdateValidation } from '../create-update.validation'
+import { gratitudeCreateUpdateValidation } from '../validation.create-update'
 
 export default function GratitudeMyAddEdit(props: {
   type: string

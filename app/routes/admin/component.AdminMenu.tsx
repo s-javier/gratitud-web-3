@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { Icon } from '@iconify/react'
 
 // import { $loaderBar } from '~/stores'
-import Overlay from '~/components/shared/Overlay'
+import Overlay from '~/components/Overlay'
 import { cn } from '~/utils/cn'
 
 export default function AdminMenu(props: {

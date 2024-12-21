@@ -6,7 +6,7 @@ import { dayjs } from '~/utils'
 import { userTokenCookie } from '~/utils/cookie'
 import db from '~/db'
 import { sessionTable } from '~/db/schema'
-import { authCodeValidation } from './code.validation'
+import { authCodeValidation } from './validation.code'
 
 export const loader = () => {
   return new Response('Not Found', { status: 404 })

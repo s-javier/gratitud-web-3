@@ -1,7 +1,7 @@
 import { type ActionFunctionArgs } from 'react-router'
 import * as v from 'valibot'
 
-import { gratitudeDeleteFromDB } from './delete.db'
+import { gratitudeDeleteFromDB } from './db.delete'
 
 export const loader = () => {
   return new Response('Not Found', { status: 404 })

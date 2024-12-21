@@ -6,7 +6,7 @@ import { userTokenCookie } from '~/utils/cookie'
 import db from '~/db'
 import { organizationPersonRoleTable } from '~/db/schema'
 import { verifyUserPermission, verifyUserToken } from '~/db/queries'
-import { organizationChangeValidation } from './change.validation'
+import { organizationChangeValidation } from './validation.change'
 import { cache } from '~/utils'
 
 export const loader = () => {

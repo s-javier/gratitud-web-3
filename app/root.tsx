@@ -10,7 +10,7 @@ import {
 import { NextUIProvider } from '@nextui-org/react'
 import { Toaster } from 'sonner'
 
-import LoaderOverlay from '~/components/shared/LoaderOverlay'
+import LoaderOverlay from '~/components/LoaderOverlay'
 
 import tailwindHref from '~/assets/styles/tailwind.css?url'
 import globalHref from '~/assets/styles/global.css?url'

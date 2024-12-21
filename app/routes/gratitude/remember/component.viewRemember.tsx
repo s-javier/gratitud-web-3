@@ -1,5 +1,5 @@
-import AdminHeader from '~/components/admin/AdminHeader'
-import AdminMain from '~/components/admin/AdminMain'
+import AdminHeader from '~/routes/admin/component.AdminHeader'
+import AdminMain from '~/routes/admin/component.AdminMain'
 
 export const loader = async () => {
   return null

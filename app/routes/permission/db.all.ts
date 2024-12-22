@@ -1,4 +1,4 @@
-import { asc, eq } from 'drizzle-orm'
+import { asc } from 'drizzle-orm'
 
 import { ErrorTitle } from '~/enums'
 import db from '~/db'

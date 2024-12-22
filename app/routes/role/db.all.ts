@@ -29,7 +29,7 @@ export const getRoleAllFromDB = async (): Promise<Output> => {
       errors: {
         server: {
           title: ErrorTitle.SERVER_GENERIC,
-          message: 'No se pudo obtener las roles.',
+          message: 'No se pudo obtener los roles.',
         },
       },
     }

@@ -3,34 +3,32 @@ import { eq } from 'drizzle-orm'
 import { OutputFromDB } from '~/types'
 import { CacheData, ErrorTitle } from '~/enums'
 import db from '~/db'
-import { organizationTable } from '~/db/schema'
+import { roleTable } from '~/db/schema'
 // import { cache } from '~/utils/cache'
 
 export type Input = {
   id: string
   title: string
-  isActive: boolean
 }
 
-export const organizationUpdateFromDB = async (input: Input): Promise<OutputFromDB> => {
+export const roleUpdateFromDB = async (input: Input): Promise<OutputFromDB> => {
   try {
     await db
-      .update(organizationTable)
+      .update(roleTable)
       .set({
         title: input.title,
-        isActive: input.isActive,
       })
-      .where(eq(organizationTable.id, input.id!))
+      .where(eq(roleTable.id, input.id!))
   } catch (err) {
     if (process.env.NODE_ENV) {
-      console.error('Error en DB. No se pudo actualizar la organización.')
+      console.error('Error en DB. No se pudo actualizar el rol.')
       console.info(err)
     }
     return {
       errors: {
         server: {
           title: ErrorTitle.SERVER_GENERIC,
-          message: 'No se pudo editar la organización.',
+          message: 'No se pudo editar el rol.',
         },
       },
     }

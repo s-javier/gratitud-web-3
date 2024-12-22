@@ -14,10 +14,7 @@ type Props = {
   close: () => void
   data: {
     id: string
-    spm: string | null
-    firstName: string
-    paternalSurname: string | null
-    maternalSurname: string | null
+    title: string
   }
 }
 
@@ -29,7 +26,7 @@ type FetcherOutput = {
   }
 }
 
-export default function ReceivableDelete(props: Props) {
+export default function RoleDelete(props: Props) {
   const setLoaderOverlay = useLoaderOverlayStore((state) => state.setLoaderOverlay)
   const fetcher = useFetcher<FetcherOutput>()
 
@@ -62,7 +59,7 @@ export default function ReceivableDelete(props: Props) {
   return (
     <Overlay type="dialog" isActive={props.isShow}>
       <Dialog
-        title="Eliminación de cuenta"
+        title="Eliminación de rol"
         close={props.close}
         footer={
           <>
@@ -85,7 +82,7 @@ export default function ReceivableDelete(props: Props) {
               onClick={async () => {
                 const formData = new FormData()
                 formData.append('id', props.data.id)
-                fetcher.submit(formData, { method: 'post', action: Api.RECEIVABLE_DELETE })
+                fetcher.submit(formData, { method: 'post', action: Api.ROLE_DELETE })
               }}
             >
               Sí, eliminar
@@ -94,18 +91,8 @@ export default function ReceivableDelete(props: Props) {
         }
       >
         <p className="text-center mb-4">
-          {props.data.spm ? (
-            <>
-              ¿Estás seguro que deseas eliminar la cuenta con SPM{' '}
-              <span className="font-bold">{props.data.spm}</span> cuyo paciente es{' '}
-            </>
-          ) : (
-            <>¿Estás seguro que deseas eliminar la cuenta cuyo paciente es </>
-          )}
-          <span className="font-bold">
-            {props.data.firstName} {props.data.paternalSurname} {props.data.maternalSurname}
-          </span>
-          ?
+          ¿Estás seguro que deseas eliminar el rol{' '}
+          <span className="font-bold">{props.data.title}</span>?
         </p>
         <p className="text-center">
           Se perderán permanentemente los datos eliminados y los que estén asociados.

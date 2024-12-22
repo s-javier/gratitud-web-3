@@ -1,11 +1,11 @@
 import { redirect, type ActionFunctionArgs } from 'react-router'
+import * as v from 'valibot'
 
 import { Page } from '~/enums'
 import { userTokenCookie } from '~/utils/cookie'
 import { verifyUserToken } from '~/routes/admin/db.verify-user-token'
 import { verifyUserPermission } from '~/routes/admin/db.verify-user-permission'
-import { organizationCreateUpdateValidation } from './validation.create-update'
-import { organizationUpdateFromDB } from './db.update'
+import { delteRolePermissionFromDB } from './db.role-permission'
 
 export const loader = () => {
   return new Response('Not Found', { status: 404 })
@@ -33,26 +33,44 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   }
 
   const formData = await request.formData()
-  const id = String(formData.get('id'))
-  const title = String(formData.get('title'))
-  const isActive = formData.get('isActive') === 'true'
+  const roleId = String(formData.get('roleId'))
+  const permissionId = String(formData.get('permissionId'))
+  const type = String(formData.get('type'))
 
   /* ▼ Validación de formulario */
-  const validation = organizationCreateUpdateValidation({
-    id,
-    title,
-    isActive,
-  })
-  if (Object.keys(validation.errors).length > 0) {
-    return validation
+  const roleIdErr = v.safeParse(
+    v.pipe(
+      v.string('El valor de este campo es inválido.'),
+      v.trim(),
+      v.uuid('El valor de este campo es inválido.'),
+    ),
+    roleId,
+  )
+  if (roleIdErr.issues) {
+    return {
+      errors: {
+        roleId: roleIdErr.issues[0].message,
+      },
+    }
+  }
+  const permissionIdErr = v.safeParse(
+    v.pipe(
+      v.string('El valor de este campo es inválido.'),
+      v.trim(),
+      v.uuid('El valor de este campo es inválido.'),
+    ),
+    permissionId,
+  )
+  if (permissionIdErr.issues) {
+    return {
+      errors: {
+        permissionId: permissionIdErr.issues[0].message,
+      },
+    }
   }
   /* ▲ Validación de formulario */
 
-  const result = await organizationUpdateFromDB({
-    id,
-    title,
-    isActive,
-  })
+  const result = await delteRolePermissionFromDB({ roleId, permissionId, type })
   if (result?.errors?.server) {
     return result
   }

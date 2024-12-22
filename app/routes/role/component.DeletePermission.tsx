@@ -13,8 +13,11 @@ type Props = {
   isShow: boolean
   close: () => void
   data: {
-    id: string
-    title: string
+    roleId: string
+    roleTitle: string
+    permissionId: string
+    permissionType: string
+    permissionPath: string
   }
 }
 
@@ -26,7 +29,7 @@ type FetcherOutput = {
   }
 }
 
-export default function OrganizationDelete(props: Props) {
+export default function RoleDeletePermission(props: Props) {
   const setLoaderOverlay = useLoaderOverlayStore((state) => state.setLoaderOverlay)
   const fetcher = useFetcher<FetcherOutput>()
 
@@ -59,7 +62,7 @@ export default function OrganizationDelete(props: Props) {
   return (
     <Overlay type="dialog" isActive={props.isShow}>
       <Dialog
-        title="Eliminación de organización"
+        title="Eliminación de relación: Rol - Permiso"
         close={props.close}
         footer={
           <>
@@ -81,8 +84,13 @@ export default function OrganizationDelete(props: Props) {
               className="!text-white !bg-red-500 hover:!bg-red-400 !font-bold"
               onClick={async () => {
                 const formData = new FormData()
-                formData.append('id', props.data.id)
-                fetcher.submit(formData, { method: 'post', action: Api.ORGANIZATION_DELETE })
+                formData.append('roleId', props.data.roleId)
+                formData.append('permissionId', props.data.permissionId)
+                formData.append('type', props.data.permissionType)
+                fetcher.submit(formData, {
+                  method: 'post',
+                  action: Api.ROLE_DELETE_RELATION_PERMISSION,
+                })
               }}
             >
               Sí, eliminar
@@ -91,9 +99,13 @@ export default function OrganizationDelete(props: Props) {
         }
       >
         <p className="text-center mb-4">
-          ¿Estás seguro que deseas eliminar la organización{' '}
-          <span className="font-bold">{props.data.title}</span>?
+          El rol <strong>{props.data.roleTitle}</strong> está relacionado con el permiso{' '}
+          <strong>
+            {props.data.permissionPath} ({props.data.permissionType})
+          </strong>
+          .
         </p>
+        <p className="text-center mb-4">¿Estás seguro que deseas eliminar la relación?</p>
         <p className="text-center">
           Se perderán permanentemente los datos eliminados y los que estén asociados.
         </p>

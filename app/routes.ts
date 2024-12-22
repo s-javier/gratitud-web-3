@@ -11,6 +11,16 @@ export default [
   route(Api.ORGANIZATION_DELETE.slice(1), './routes/organization/all/api.delete.tsx'),
   route(Api.ORGANIZATION_CHANGE.slice(1), './routes/organization/change/api.change.tsx'),
 
+  route(Api.ROLE_CREATE.slice(1), './routes/role/api.create.tsx'),
+  route(Api.ROLE_UPDATE.slice(1), './routes/role/api.update.tsx'),
+  route(Api.ROLE_DELETE.slice(1), './routes/role/api.delete.tsx'),
+  // route(Api.ROLE_CREATE_RELATION_PERMISSION.slice(1), './routes/role/api.create-relation-permission.tsx'),
+  // route(Api.ROLE_UPDATE_PERMISSION_POSITION.slice(1), './routes/role/api.update-permission-position.tsx'),
+  route(
+    Api.ROLE_DELETE_RELATION_PERMISSION.slice(1),
+    './routes/role/api.delete.relation-permission.tsx',
+  ),
+
   route(Api.GRATITUDE_CREATE.slice(1), './routes/gratitude/api.create.tsx'),
   route(Api.GRATITUDE_UPDATE.slice(1), './routes/gratitude/api.update.tsx'),
   route(Api.GRATITUDE_DELETE.slice(1), './routes/gratitude/api.delete.tsx'),

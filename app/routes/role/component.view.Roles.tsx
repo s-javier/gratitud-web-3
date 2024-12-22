@@ -8,19 +8,48 @@ import { toast } from 'sonner'
 import { UserInfo } from '~/types'
 import { ErrorMessage, ErrorTitle } from '~/enums'
 import { getRoleAllFromDB } from './db.all'
-import { MUIBtnStyle } from '~/assets/styles/mui'
+import {
+  getRolePermissionAllFromDB,
+  getRolePermissionAllPopulatedFromDB,
+} from '~/routes/role/db.role-permission'
+import { getPermissionAllFromDB } from '~/routes/permission/db.all'
+import { usePermissionsStore, useRolePermissionStore, useRolesStore } from '~/stores'
 import AdminHeader from '~/routes/admin/component.AdminHeader'
 import AdminMain from '~/routes/admin/component.AdminMain'
+import Add from './component.Add'
+import Info from './component.Info'
+import AddEdit from './component.AddEdit'
+import Delete from './component.Delete'
 
-type Element = {
+export type Element = {
   id: string
   title: string
+  permissions: {
+    view: {
+      permissionId: string
+      permissionPath: string
+      sort: number | null
+    }[]
+    api: {
+      permissionId: string
+      permissionPath: string
+    }[]
+  }
 }
 
 type Loader = {
   errors?: { server: { title: string; message: string } }
   userInfo?: UserInfo
   roles?: Element[]
+  rolePermission?: {
+    roleId: string
+    permissionId: string
+  }[]
+  permissions?: {
+    id: string
+    type: string
+    path: string
+  }[]
 }
 
 export const loader = async ({ context }: LoaderFunctionArgs) => {
@@ -35,8 +64,41 @@ export const loader = async ({ context }: LoaderFunctionArgs) => {
       },
     }
   }
-  const organizations = await getRoleAllFromDB()
-  return { userInfo, ...organizations }
+  const roles = await getRoleAllFromDB()
+  if (roles.errors) {
+    return { ...roles }
+  }
+  const rolePermission = await getRolePermissionAllFromDB()
+  if (rolePermission.errors) {
+    return { ...rolePermission }
+  }
+  const permissions = await getPermissionAllFromDB()
+  if (permissions.errors) {
+    return { ...permissions }
+  }
+  const rolePermissionPopulated = await getRolePermissionAllPopulatedFromDB()
+  if (rolePermissionPopulated.errors) {
+    return { ...rolePermissionPopulated }
+  }
+  const rolePermissionPopulatedData = rolePermissionPopulated.rolePermissionPopulated!
+  roles.roles!.forEach((role: any) => {
+    role.permissions = {
+      view: rolePermissionPopulatedData
+        .filter((item: any) => item.roleId === role.id && item.permissionType === 'view')
+        .map((item: any) => ({
+          permissionId: item.permissionId,
+          permissionPath: item.permissionPath,
+          sort: item.sort,
+        })),
+      api: rolePermissionPopulatedData
+        .filter((item: any) => item.roleId === role.id && item.permissionType === 'api')
+        .map((item: any) => ({
+          permissionId: item.permissionId,
+          permissionPath: item.permissionPath,
+        })),
+    }
+  })
+  return { userInfo, ...roles, ...rolePermission, ...permissions }
 }
 
 export const meta: MetaFunction = () => {
@@ -54,14 +116,17 @@ const columns: MRT_ColumnDef<any>[] = [
     header: 'Rol',
   },
   {
-    accessorFn: () => '',
+    accessorFn: (row: Element) => row.permissions.view.length + row.permissions.api.length,
     header: 'Permisos',
   },
 ]
 
-export default function OrganizationAllRoute() {
+export default function RoleAllRoute() {
   const loader = useLoaderData<Loader>()
   const [elements, setElements] = useState<Element[]>([])
+  const setRoles = useRolesStore((state) => state.setRoles)
+  const setPermissions = usePermissionsStore((state) => state.setPermissions)
+  const setRolePermission = useRolePermissionStore((state) => state.setRolePermission)
   const table = useMaterialReactTable({
     columns,
     data: elements,
@@ -78,7 +143,7 @@ export default function OrganizationAllRoute() {
       <MenuItem
         key={`view-${row.original.id}`}
         onClick={() => {
-          setReceivable(row.original)
+          setElement(row.original)
           setIsInfoOpen(true)
           closeMenu()
         }}
@@ -92,7 +157,7 @@ export default function OrganizationAllRoute() {
       <MenuItem
         key={`edit-${row.original.id}`}
         onClick={() => {
-          setReceivable(row.original)
+          setElement(row.original)
           setIsEditOpen(true)
           closeMenu()
         }}
@@ -106,7 +171,7 @@ export default function OrganizationAllRoute() {
       <MenuItem
         key={`delete-${row.original.id}`}
         onClick={() => {
-          setReceivable(row.original)
+          setElement(row.original)
           setIsDeleteOpen(true)
           closeMenu()
         }}
@@ -121,7 +186,7 @@ export default function OrganizationAllRoute() {
     enableRowSelection: true,
   })
   const { getRowModel } = table
-  const [receivable, setReceivable] = useState<any>({})
+  const [element, setElement] = useState<any>({})
   const [isInfoOpen, setIsInfoOpen] = useState(false)
   const [isEditOpen, setIsEditOpen] = useState(false)
   const [isDeleteOpen, setIsDeleteOpen] = useState(false)
@@ -135,19 +200,21 @@ export default function OrganizationAllRoute() {
       return
     }
     setElements(loader.roles || [])
+    setRoles(loader.roles || [])
+    setPermissions(loader.permissions || [])
+    setRolePermission(loader.rolePermission || [])
   }, [loader])
 
   return (
     <>
+      <Info isShow={isInfoOpen} close={() => setIsInfoOpen(false)} data={element} />
+      <AddEdit type="edit" isShow={isEditOpen} close={() => setIsEditOpen(false)} data={element} />
+      <Delete isShow={isDeleteOpen} close={() => setIsDeleteOpen(false)} data={element} />
       <AdminHeader
         title={
           <h1 className="max-w-[800px] text-3xl font-bold tracking-tight text-white">Roles</h1>
         }
-        buttons={
-          <Button type="button" variant="contained" size="small" sx={MUIBtnStyle}>
-            Agregar
-          </Button>
-        }
+        buttons={<Add />}
       />
       <AdminMain>
         <p className="mb-8">Roles del sistema.</p>

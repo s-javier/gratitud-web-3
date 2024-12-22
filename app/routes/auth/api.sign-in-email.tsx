@@ -5,7 +5,7 @@ import { customAlphabet } from 'nanoid'
 import { createTransport } from 'nodemailer'
 import { add } from 'date-fns'
 
-import { ErrorMessage, ErrorTitle } from '~/enums'
+import { ErrorMessage, ErrorTitle, General } from '~/enums'
 import db from '~/db'
 import { personTable, sessionTable } from '~/db/schema'
 import { authLoginValidation } from './validation.login'
@@ -119,14 +119,14 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   })
   try {
     await transporter.sendMail({
-      from: '"CxC" <noresponder@condimento.cl>',
+      from: `"${General.TITLE}" <noresponder@condimento.cl>`,
       to: email,
       subject: 'Ingreso',
       html: `
           <div style="background-color:rgb(207,208,209);padding-top:30px;padding-bottom:30px">
             <div style="padding:30px;font-size:14px;font-family:Lato,Helvetica,Arial,sans-serif;color:rgb(55,65,81);line-height:1.5em;width:98%;max-width:500px;border-radius:16px;margin:10px auto 0;background-color:white">
               <p style="margin-bottom: 16px">Hola, ${user.firstName}:</p>
-              <p style="margin-bottom: 16px">Bienvenido/a a CxC. Por favor, utiliza este código para ingresar:</p>
+              <p style="margin-bottom: 16px">Bienvenido/a a ${General.TITLE}. Por favor, utiliza este código para ingresar:</p>
               <p style="margin-bottom: 30px; text-align: center;">${code}</p>
               <p>Que tengas un buen día.</p>
             </div>

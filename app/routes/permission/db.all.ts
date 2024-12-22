@@ -1,46 +1,45 @@
+import { asc, eq } from 'drizzle-orm'
+
 import { ErrorTitle } from '~/enums'
 import db from '~/db'
-import { organizationTable } from '~/db/schema'
+import { permissionTable } from '~/db/schema'
 // import { CacheData } from '~/enums'
 // import { cache } from '~/utils/cache'
 
 type Output = {
   errors?: { server: { title: string; message: string } }
-  organizations?: {
+  permissions?: {
     id: string
-    title: string
-    isActive: boolean
+    type: string
+    path: string
   }[]
 }
 
-export const getOrganizationAllFromDB = async (): Promise<Output> => {
-  let organizations
+export const getPermissionAllFromDB = async (): Promise<Output> => {
+  let permissions
   // if (cache.has(JSON.stringify({ data: CacheData.ORGANIZATIONS_ALL }))) {
   //   organizations = cache.get(JSON.stringify({ data: CacheData.ORGANIZATIONS_ALL })) as any[]
   //   return
   // }
   try {
-    organizations = await db
-      .select({
-        id: organizationTable.id,
-        title: organizationTable.title,
-        isActive: organizationTable.isActive,
-      })
-      .from(organizationTable)
+    permissions = await await db
+      .select({ id: permissionTable.id, type: permissionTable.type, path: permissionTable.path })
+      .from(permissionTable)
+      .orderBy(asc(permissionTable.type), asc(permissionTable.path))
   } catch (err) {
     if (process.env.NODE_ENV) {
-      console.error('Error en DB. Obtención de organizaciones.')
+      console.error('Error en DB. Obtención de permisos.')
       console.info(err)
     }
     return {
       errors: {
         server: {
           title: ErrorTitle.SERVER_GENERIC,
-          message: 'No se pudo obtener las organizaciones.',
+          message: 'No se pudo obtener las permisos.',
         },
       },
     }
   }
   // cache.set(JSON.stringify({ data: CacheData.ORGANIZATIONS_ALL }), organizations)
-  return { organizations }
+  return { permissions }
 }

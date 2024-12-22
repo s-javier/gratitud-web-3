@@ -1,46 +1,53 @@
+import { eq } from 'drizzle-orm'
+
 import { ErrorTitle } from '~/enums'
 import db from '~/db'
-import { organizationTable } from '~/db/schema'
+import { menupageTable, permissionTable } from '~/db/schema'
 // import { CacheData } from '~/enums'
 // import { cache } from '~/utils/cache'
 
 type Output = {
   errors?: { server: { title: string; message: string } }
-  organizations?: {
+  menuPages?: {
     id: string
     title: string
-    isActive: boolean
+    icon: string | null
+    permissionId: string
+    path: string
   }[]
 }
 
-export const getOrganizationAllFromDB = async (): Promise<Output> => {
-  let organizations
+export const getMenuPageAllFromDB = async (): Promise<Output> => {
+  let menuPages
   // if (cache.has(JSON.stringify({ data: CacheData.ORGANIZATIONS_ALL }))) {
   //   organizations = cache.get(JSON.stringify({ data: CacheData.ORGANIZATIONS_ALL })) as any[]
   //   return
   // }
   try {
-    organizations = await db
+    menuPages = await db
       .select({
-        id: organizationTable.id,
-        title: organizationTable.title,
-        isActive: organizationTable.isActive,
+        id: menupageTable.id,
+        title: menupageTable.title,
+        icon: menupageTable.icon,
+        permissionId: menupageTable.permissionId,
+        path: permissionTable.path,
       })
-      .from(organizationTable)
+      .from(menupageTable)
+      .innerJoin(permissionTable, eq(menupageTable.permissionId, permissionTable.id))
   } catch (err) {
     if (process.env.NODE_ENV) {
-      console.error('Error en DB. Obtención de organizaciones.')
+      console.error('Error en DB. Obtención de usuarios.')
       console.info(err)
     }
     return {
       errors: {
         server: {
           title: ErrorTitle.SERVER_GENERIC,
-          message: 'No se pudo obtener las organizaciones.',
+          message: 'No se pudo obtener los usuarios.',
         },
       },
     }
   }
   // cache.set(JSON.stringify({ data: CacheData.ORGANIZATIONS_ALL }), organizations)
-  return { organizations }
+  return { menuPages }
 }

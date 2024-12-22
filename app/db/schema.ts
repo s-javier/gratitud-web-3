@@ -1,5 +1,5 @@
 import { relations } from 'drizzle-orm'
-import { boolean, integer, pgEnum, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core'
+import { boolean, integer, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core'
 
 export const personTable = pgTable('person', {
   id: uuid().defaultRandom().primaryKey(),
@@ -111,12 +111,13 @@ export const organizationPersonRoleTableRelations = relations(
   }),
 )
 
-export const permissionTypeEnum = pgEnum('permission_type', ['api', 'view'])
+// export const permissionTypeEnum = pgEnum('permission_type', ['api', 'view'])
 
 export const permissionTable = pgTable('permission', {
   id: uuid().defaultRandom().primaryKey(),
   path: text().notNull().unique(),
-  type: permissionTypeEnum(),
+  // type: permissionTypeEnum(),
+  type: text().notNull(),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true })
     .defaultNow()
@@ -196,14 +197,6 @@ export const gratitudeTable = pgTable('gratitude', {
     .$onUpdate(() => new Date()),
 })
 
-export const gratitudeTableRelations = relations(gratitudeTable, ({ one, many }) => ({
-  person: one(personTable, {
-    fields: [gratitudeTable.personId],
-    references: [personTable.id],
-  }),
-  gratitudeTag: many(gratitudeTagTable),
-}))
-
 export const tagTable = pgTable('tag', {
   id: uuid().defaultRandom().primaryKey(),
   personId: uuid('person_id')
@@ -215,14 +208,6 @@ export const tagTable = pgTable('tag', {
     .defaultNow()
     .$onUpdate(() => new Date()),
 })
-
-export const tagTableRelations = relations(tagTable, ({ one, many }) => ({
-  person: one(personTable, {
-    fields: [tagTable.personId],
-    references: [personTable.id],
-  }),
-  gratitudeTag: many(gratitudeTagTable),
-}))
 
 export const gratitudeTagTable = pgTable('gratitude_tag', {
   id: uuid().defaultRandom().primaryKey(),
@@ -237,14 +222,3 @@ export const gratitudeTagTable = pgTable('gratitude_tag', {
     .defaultNow()
     .$onUpdate(() => new Date()),
 })
-
-export const gratitudeTagTableRelations = relations(gratitudeTagTable, ({ one }) => ({
-  gratitude: one(gratitudeTable, {
-    fields: [gratitudeTagTable.gratitudeId],
-    references: [gratitudeTable.id],
-  }),
-  tag: one(tagTable, {
-    fields: [gratitudeTagTable.tagId],
-    references: [tagTable.id],
-  }),
-}))

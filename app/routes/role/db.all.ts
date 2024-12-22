@@ -1,46 +1,39 @@
 import { ErrorTitle } from '~/enums'
 import db from '~/db'
-import { organizationTable } from '~/db/schema'
+import { roleTable } from '~/db/schema'
 // import { CacheData } from '~/enums'
 // import { cache } from '~/utils/cache'
 
 type Output = {
   errors?: { server: { title: string; message: string } }
-  organizations?: {
+  roles?: {
     id: string
     title: string
-    isActive: boolean
   }[]
 }
 
-export const getOrganizationAllFromDB = async (): Promise<Output> => {
-  let organizations
+export const getRoleAllFromDB = async (): Promise<Output> => {
+  let roles
   // if (cache.has(JSON.stringify({ data: CacheData.ORGANIZATIONS_ALL }))) {
   //   organizations = cache.get(JSON.stringify({ data: CacheData.ORGANIZATIONS_ALL })) as any[]
   //   return
   // }
   try {
-    organizations = await db
-      .select({
-        id: organizationTable.id,
-        title: organizationTable.title,
-        isActive: organizationTable.isActive,
-      })
-      .from(organizationTable)
+    roles = await db.select({ id: roleTable.id, title: roleTable.title }).from(roleTable)
   } catch (err) {
     if (process.env.NODE_ENV) {
-      console.error('Error en DB. Obtención de organizaciones.')
+      console.error('Error en DB. Obtención de roles.')
       console.info(err)
     }
     return {
       errors: {
         server: {
           title: ErrorTitle.SERVER_GENERIC,
-          message: 'No se pudo obtener las organizaciones.',
+          message: 'No se pudo obtener las roles.',
         },
       },
     }
   }
   // cache.set(JSON.stringify({ data: CacheData.ORGANIZATIONS_ALL }), organizations)
-  return { organizations }
+  return { roles }
 }

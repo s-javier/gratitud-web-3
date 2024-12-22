@@ -71,7 +71,7 @@ export default function AuthCodeRoute() {
   return (
     isCodeSent && (
       <>
-        <p className="mb-4">¡Gracias por iniciar sesión en CxC!</p>
+        <p className="mb-4">¡Gracias por iniciar sesión en {General.TITLE}!</p>
         <p className="mb-4">No cierres ni actulices esta página.</p>
         <p className="mb-4">
           Se te ha enviado un email con un código para que lo ingreses más abajo.

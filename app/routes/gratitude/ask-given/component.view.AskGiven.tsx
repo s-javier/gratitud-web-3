@@ -10,16 +10,16 @@ export const loader = async () => {
 }
 
 export const meta: MetaFunction = () => {
-  return [{ title: 'Recordar | Gratitud' }, { name: 'description', content: '' }]
+  return [{ title: 'Pide y se te dará | Gratitud' }, { name: 'description', content: '' }]
 }
 
-export default function GratitudeRememberRoute() {
+export default function GratitudeAskGivenRoute() {
   return (
     <>
       <AdminHeader
         title={
           <h1 className="max-w-[800px] text-3xl font-bold tracking-tight text-white">
-            Recordar agradecimientos
+            Pide y se te dará
           </h1>
         }
         buttons={

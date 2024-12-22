@@ -25,3 +25,22 @@ export const MUIBtnStyle = {
     backgroundColor: 'var(--o-btn-primary-bg-hover-color)',
   },
 }
+
+export const MUISwitchStyle = {
+  // Color del switch cuando está activo
+  '& .MuiSwitch-switchBase.Mui-checked': {
+    color: 'var(--o-btn-primary-bg-color)',
+  },
+  // Color del track cuando está activo
+  '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
+    backgroundColor: 'var(--o-btn-primary-bg-color)',
+  },
+  // // Color del switch cuando está inactivo
+  // '& .MuiSwitch-switchBase': {
+  //   color: 'gray',
+  // },
+  // // Color del track cuando está inactivo
+  // '& .MuiSwitch-track': {
+  //   backgroundColor: 'lightgray',
+  // },
+}

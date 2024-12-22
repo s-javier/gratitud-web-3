@@ -1,5 +1,5 @@
 {
-  "id": "3ede04a2-7481-42fa-9058-eba03d35bd0e",
+  "id": "1c55c8e5-101e-473e-91f7-8811541aee58",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -94,6 +94,13 @@
       "name": "gratitude_tag",
       "schema": "",
       "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
         "gratitude_id": {
           "name": "gratitude_id",
           "type": "uuid",
@@ -150,15 +157,7 @@
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {
-        "gratitude_tag_gratitude_id_tag_id_pk": {
-          "name": "gratitude_tag_gratitude_id_tag_id_pk",
-          "columns": [
-            "gratitude_id",
-            "tag_id"
-          ]
-        }
-      },
+      "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
@@ -234,6 +233,13 @@
       "name": "organization_person_role",
       "schema": "",
       "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
         "organization_id": {
           "name": "organization_id",
           "type": "uuid",
@@ -323,16 +329,7 @@
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {
-        "organization_person_role_organization_id_person_id_role_id_pk": {
-          "name": "organization_person_role_organization_id_person_id_role_id_pk",
-          "columns": [
-            "organization_id",
-            "person_id",
-            "role_id"
-          ]
-        }
-      },
+      "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
@@ -412,10 +409,9 @@
         },
         "type": {
           "name": "type",
-          "type": "permission_type",
-          "typeSchema": "public",
+          "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "created_at": {
           "name": "created_at",
@@ -525,6 +521,13 @@
       "name": "role_permission",
       "schema": "",
       "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
         "role_id": {
           "name": "role_id",
           "type": "uuid",
@@ -587,15 +590,7 @@
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {
-        "role_permission_role_id_permission_id_pk": {
-          "name": "role_permission_role_id_permission_id_pk",
-          "columns": [
-            "role_id",
-            "permission_id"
-          ]
-        }
-      },
+      "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
@@ -796,16 +791,7 @@
       "isRLSEnabled": false
     }
   },
-  "enums": {
-    "public.permission_type": {
-      "name": "permission_type",
-      "schema": "public",
-      "values": [
-        "api",
-        "view"
-      ]
-    }
-  },
+  "enums": {},
   "schemas": {},
   "sequences": {},
   "roles": {},

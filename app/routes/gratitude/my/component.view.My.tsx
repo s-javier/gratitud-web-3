@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { LoaderFunctionArgs, MetaFunction, useLoaderData } from 'react-router'
+import { LoaderFunctionArgs, type MetaFunction, useLoaderData } from 'react-router'
 import { toast } from 'sonner'
 import { Input } from '@nextui-org/react'
 
@@ -14,6 +14,27 @@ import Add from '~/routes/gratitude/my/component.Add'
 import Info from '~/routes/gratitude/my/component.Info'
 import AddEdit from '~/routes/gratitude/my/component.AddEdit'
 import Delete from '~/routes/gratitude/my/component.Delete'
+
+type Element = {
+  id: string
+  title: string | null
+  description: string
+  createdAt: Date
+}
+
+type Loader = {
+  errors?: { server: { title: string; message: string } }
+  userInfo?: UserInfo
+  myGratitudes?: Element[]
+  /* ↓ Para input de agregar/editar */
+  // patients?: {
+  //   id: string
+  //   rut: string | null
+  //   firstName: string
+  //   paternalSurname: string | null
+  //   maternalSurname: string | null
+  // }[]
+}
 
 export const loader = async ({ context }: LoaderFunctionArgs) => {
   const userInfo = (await context.middleware) as UserInfo | 'error'
@@ -36,17 +57,7 @@ export const meta: MetaFunction = () => {
 }
 
 export default function GratitudeMyRoute() {
-  const loader = useLoaderData<{
-    errors?: { server: { title: string; message: string } }
-    userInfo?: UserInfo
-    myGratitudes?: {
-      id: string
-      title: string | null
-      description: string
-      createdAt: Date
-    }[]
-  }>()
-
+  const loader = useLoaderData<Loader>()
   const [gratitude, setGratitude] = useState<any>({})
   const [isInfoOpen, setIsInfoOpen] = useState(false)
   const [isEditOpen, setIsEditOpen] = useState(false)

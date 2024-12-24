@@ -25,16 +25,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     return redirect(Page.LOGIN)
   }
 
-  const currentUrl = new URL(request.url)
-  const pathname = currentUrl.pathname
-  const verifiedUserPermission = await verifyUserPermission({
-    roleId: verifiedUserToken.roleId!,
-    path: pathname,
-  })
-  if (verifiedUserPermission.serverError) {
-    return redirect(Page.ADMIN_WELCOME)
-  }
-
   const formData = await request.formData()
   const organizationId = String(formData.get('organizationId'))
 

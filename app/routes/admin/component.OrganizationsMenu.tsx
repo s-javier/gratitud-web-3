@@ -35,8 +35,7 @@ export default function OrganizationsMenu() {
               textValue={`Organización ${element.title}`}
               key={element.id}
               startContent={<Icon icon="mdi:business" width="100%" className="w-5 text-gray-500" />}
-              onClick={() => {
-                console.log('H')
+              onPress={() => {
                 const formData = new FormData()
                 formData.append('organizationId', element.id)
                 fetcher.submit(formData, { method: 'post', action: Api.ORGANIZATION_CHANGE })

@@ -5,6 +5,7 @@ import { Api, Page } from './enums'
 export default [
   route(Api.AUTH_SIGN_IN_EMAIL.slice(1), './routes/auth/api.sign-in-email.tsx'),
   route(Api.AUTH_SIGN_IN_CODE.slice(1), './routes/auth/api.sign-in-code.tsx'),
+  route(Api.AUTH_SIGN_OUT.slice(1), './routes/auth/api.logout.tsx'),
 
   route(Api.ORGANIZATION_CREATE.slice(1), './routes/organization/all/api.create.tsx'),
   route(Api.ORGANIZATION_UPDATE.slice(1), './routes/organization/all/api.update.tsx'),

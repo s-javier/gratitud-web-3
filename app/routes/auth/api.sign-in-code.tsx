@@ -1,5 +1,5 @@
 import { type ActionFunctionArgs } from 'react-router'
-import { and, eq, ne } from 'drizzle-orm'
+import { and, desc, eq, ne } from 'drizzle-orm'
 import { isAfter } from 'date-fns'
 
 import { ErrorMessage, ErrorTitle, Page } from '~/enums'
@@ -16,15 +16,18 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   if (request.method !== 'POST') {
     return new Response('Not Found', { status: 404 })
   }
+
   const formData = await request.formData()
   const code = String(formData.get('code'))
   const timeLimit = Number(formData.get('timeLimit'))
+
   /* ▼ Validación de formulario */
   const validation = authCodeValidation({ timeLimit, code })
   if (Object.keys(validation.errors).length > 0) {
     return validation
   }
   /* ▲ Validación de formulario */
+
   let session
   try {
     const query = await db
@@ -126,6 +129,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
           eq(sessionTable.personId, session.personId),
         ),
       )
+      .orderBy(desc(sessionTable.createdAt))
   } catch (err) {
     if (process.env.NODE_ENV === 'development') {
       console.error('Error en DB. Consulta de sesiones a desactivar.')

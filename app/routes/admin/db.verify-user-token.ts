@@ -24,6 +24,17 @@ export const verifyUserToken = async (
       },
     }
   }
+  if (Object.keys(userToken).length === 0) {
+    if (process.env.NODE_ENV) {
+      console.error('userToken mal obtenido en el parse.')
+    }
+    return {
+      serverError: {
+        title: ErrorTitle.SERVER_GENERIC,
+        message: ErrorMessage.SERVER_GENERIC,
+      },
+    }
+  }
   let session
   try {
     const query = await db

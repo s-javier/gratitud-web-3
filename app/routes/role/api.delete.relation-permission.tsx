@@ -16,12 +16,15 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     return new Response('Not Found', { status: 404 })
   }
 
+  /* ▼ Validación de token */
   const userToken = await userTokenCookie.parse(request.headers.get('Cookie'))
   const verifiedUserToken = await verifyUserToken(userToken)
   if (verifiedUserToken.serverError) {
     return redirect(Page.LOGIN)
   }
+  /* ▲ Validación de token */
 
+  /* ▼ Validación de permiso */
   const currentUrl = new URL(request.url)
   const pathname = currentUrl.pathname
   const verifiedUserPermission = await verifyUserPermission({
@@ -31,6 +34,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   if (verifiedUserPermission.serverError) {
     return redirect(Page.ADMIN_WELCOME)
   }
+  /* ▲ Validación de permiso */
 
   const formData = await request.formData()
   const roleId = String(formData.get('roleId'))

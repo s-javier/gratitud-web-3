@@ -86,7 +86,7 @@ export default function Overlay(props: {
                 'relative overflow-hidden rounded-lg text-left',
                 'w-full',
                 props.width ?? 'sm:max-w-sm',
-                'transform translate-y-[-200px]',
+                'transform',
                 'opacity-0',
                 is ? '' : 'hidden',
               )}

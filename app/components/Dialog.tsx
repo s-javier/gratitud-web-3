@@ -14,7 +14,7 @@ export default function Dialog(props: {
       className={cn(
         'o-dialog',
         'pointer-events-auto flex w-full flex-col overflow-hidden rounded-xl',
-        ' bg-white shadow-sm',
+        'bg-white shadow-sm',
       )}
       style={{ maxHeight: 'calc(100vh - 32px)' }}
     >

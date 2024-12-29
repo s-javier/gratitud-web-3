@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useLoaderData, type LoaderFunctionArgs, type MetaFunction } from 'react-router'
-import { Button, ListItemIcon, MenuItem } from '@mui/material'
+import { ListItemIcon, MenuItem } from '@mui/material'
 import { MaterialReactTable, useMaterialReactTable, type MRT_ColumnDef } from 'material-react-table'
 import { Icon } from '@iconify/react'
 import { toast } from 'sonner'
@@ -11,6 +11,10 @@ import { getPermissionAllFromDB } from './db.all'
 import { MUIBtnStyle } from '~/assets/styles/mui'
 import AdminHeader from '~/routes/admin/component.AdminHeader'
 import AdminMain from '~/routes/admin/component.AdminMain'
+import Add from './component.Add'
+// import Info from './component.Info'
+// import AddEdit from './component.AddEdit'
+// import Delete from './component.Delete'
 
 type Element = {
   id: string
@@ -64,7 +68,7 @@ const columns: MRT_ColumnDef<any>[] = [
   },
 ]
 
-export default function OrganizationAllRoute() {
+export default function PermissionAllRoute() {
   const loader = useLoaderData<Loader>()
   const [elements, setElements] = useState<Element[]>([])
   const table = useMaterialReactTable({
@@ -148,11 +152,7 @@ export default function OrganizationAllRoute() {
         title={
           <h1 className="max-w-[800px] text-3xl font-bold tracking-tight text-white">Permisos</h1>
         }
-        buttons={
-          <Button type="button" variant="contained" size="small" sx={MUIBtnStyle}>
-            Agregar
-          </Button>
-        }
+        buttons={<Add />}
       />
       <AdminMain>
         <p className="mb-8">Permisos del sistema.</p>

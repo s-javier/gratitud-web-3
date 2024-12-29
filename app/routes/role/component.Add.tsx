@@ -8,7 +8,7 @@ import { MUIBtnStyle } from '~/assets/styles/mui'
 import AddEdit from './component.AddEdit'
 import AddRelationPermission from './component.AddRelationPermission'
 
-export default function ReceivableAdd() {
+export default function RoleAdd() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
   const [isClient, setIsClient] = useState(false)

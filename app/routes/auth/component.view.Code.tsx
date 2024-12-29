@@ -119,7 +119,7 @@ export default function AuthCodeRoute() {
                 favor, presiona&nbsp;
                 <Link
                   to={Page.LOGIN}
-                  className="cursor-pointer text-[var(--o-text-primary-color)] hover:underline"
+                  className="cursor-pointer text-(--o-text-primary-color) hover:underline"
                 >
                   aquí
                 </Link>
@@ -158,7 +158,7 @@ export default function AuthCodeRoute() {
           Si el código no lo recibiste o tienes algún problema, por favor, presiona&nbsp;
           <Link
             to={Page.LOGIN}
-            className="cursor-pointer text-[var(--o-text-primary-color)] hover:underline font-bold"
+            className="cursor-pointer text-(--o-text-primary-color) hover:underline font-bold"
           >
             aquí
           </Link>
@@ -178,7 +178,7 @@ function Slot(props: SlotProps) {
         'transition-all duration-300',
         'border-gray-500 border-y border-r first:border-l first:rounded-l-md last:rounded-r-md',
         'group-hover:border-accent-foreground/20 group-focus-within:border-accent-foreground/20',
-        'outline outline-0 outline-accent-foreground/20',
+        'outline-0 outline-accent-foreground/20',
         { 'outline-4 outline-accent-foreground': props.isActive },
       )}
     >

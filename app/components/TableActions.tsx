@@ -1,4 +1,4 @@
-import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react'
+// import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react'
 import { Icon } from '@iconify/react'
 
 export default function TableActions(props: {
@@ -8,13 +8,13 @@ export default function TableActions(props: {
 }) {
   return (
     <div className="flex flex-row justify-end">
-      <Dropdown placement="bottom-end">
+      {/* <Dropdown placement="bottom-end">
         <DropdownTrigger>
           <Button isIconOnly aria-label="Actions" variant="light">
             <Icon
               icon="mdi:more-vert"
               width="100%"
-              className="w-6 !text-gray-400 hover:!text-[var(--o-btn-filter-text-hover-color)]"
+              className="w-6 !text-gray-400 hover:!text-(--o-btn-filter-text-hover-color)"
             />
           </Button>
         </DropdownTrigger>
@@ -57,7 +57,7 @@ export default function TableActions(props: {
             )}
           </>
         </DropdownMenu>
-      </Dropdown>
+      </Dropdown> */}
     </div>
   )
 }

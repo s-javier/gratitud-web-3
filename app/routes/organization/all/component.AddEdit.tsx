@@ -94,7 +94,7 @@ export default function OrganizationAddEdit(props: Props) {
               variant="outlined"
               className={cn(
                 '!text-gray-700 !border-gray-300 hover:!bg-gray-50',
-                'hover:!border-[var(--o-btn-cancel-border-hover-color)]',
+                'hover:!border-(--o-btn-cancel-border-hover-color)',
                 'uppercase',
               )}
               onClick={props.close}
@@ -107,7 +107,7 @@ export default function OrganizationAddEdit(props: Props) {
                 variant="outlined"
                 className={cn(
                   '!text-gray-700 !border-gray-300 hover:!bg-gray-50',
-                  'hover:!border-[var(--o-btn-cancel-border-hover-color)]',
+                  'hover:!border-(--o-btn-cancel-border-hover-color)',
                   'uppercase',
                 )}
                 onClick={() => {

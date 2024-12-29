@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useLoaderData, type LoaderFunctionArgs, type MetaFunction } from 'react-router'
-import { Button, ListItemIcon, MenuItem } from '@mui/material'
+import { ListItemIcon, MenuItem } from '@mui/material'
 import { MaterialReactTable, useMaterialReactTable, type MRT_ColumnDef } from 'material-react-table'
 import { Icon } from '@iconify/react'
 import { toast } from 'sonner'

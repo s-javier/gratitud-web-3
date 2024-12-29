@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { LoaderFunctionArgs, type MetaFunction, useLoaderData } from 'react-router'
 import { toast } from 'sonner'
-import { Input } from '@nextui-org/react'
+// import { Input } from '@nextui-org/react'
 
 import { UserInfo } from '~/types'
 import { ErrorMessage, ErrorTitle } from '~/enums'
@@ -116,7 +116,7 @@ export default function GratitudeMyRoute() {
       />
       <AdminMain>
         <div className="max-w-[600px] m-auto">
-          <Input
+          {/* <Input
             name="q"
             type="text"
             label="Buscar agradecimiento según descripción"
@@ -124,8 +124,8 @@ export default function GratitudeMyRoute() {
             classNames={{
               inputWrapper: [
                 'border-gray-400 border-[1px]',
-                'hover:!border-[var(--o-input-border-hover-color)]',
-                'group-data-[focus=true]:border-[var(--o-input-border-hover-color)]',
+                'hover:!border-(--o-input-border-hover-color)',
+                'group-data-[focus=true]:border-(--o-input-border-hover-color)',
               ],
             }}
             size="lg"
@@ -134,7 +134,7 @@ export default function GratitudeMyRoute() {
             onChange={(e) => setSearchText(e.target.value)}
             isClearable
             onClear={() => setSearchText('')}
-          />
+          /> */}
           {filteredItems.length === 0 ? (
             <p className="text-sm text-gray-500 text-center mb-4">No tienes agradecimientos.</p>
           ) : (

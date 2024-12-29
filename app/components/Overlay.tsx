@@ -63,14 +63,14 @@ export default function Overlay(props: {
 
   return (
     <div
-      className={cn('relative', props.zIndex ?? 'z-[1400]', is ? '' : 'hidden')}
+      className={cn('relative', props.zIndex ?? 'z-1400', is ? '' : 'hidden')}
       aria-labelledby="Elemento para mostrar que está cargando"
       aria-modal="true"
     >
       <div
         // @ts-ignore
         ref={overlayBackdropRef}
-        className="fixed inset-0 bg-gray-500 bg-opacity-75 opacity-0"
+        className="fixed inset-0 bg-gray-500/75 opacity-0"
         aria-hidden="true"
         // in:backdropTransition={{ duration: 300 }}
         // out:backdropTransition={{ duration: 200 }}

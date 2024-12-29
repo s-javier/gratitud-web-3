@@ -69,7 +69,7 @@ export default function AdminHeader(props: { title: ReactNode; buttons: ReactNod
                               // transition:name="menu-page"
                               className={cn(
                                 'absolute left-0 top-0 w-full h-full rounded-md border-2',
-                                'border-[var(--o-admin-menu-expanded-border-current-color)]',
+                                'border-(--o-admin-menu-expanded-border-current-color)',
                               )}
                             />
                           )}

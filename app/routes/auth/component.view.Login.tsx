@@ -57,7 +57,7 @@ export default function AuthLoginRoute() {
   }, [fetcher])
 
   return (
-    <fetcher.Form method="post" action={Api.AUTH_SIGN_IN_EMAIL} className="space-y-8">
+    <fetcher.Form method="post" action={Api.AUTH_SIGN_IN_EMAIL} className="!space-y-8">
       <TextField
         name="email"
         // type="email"

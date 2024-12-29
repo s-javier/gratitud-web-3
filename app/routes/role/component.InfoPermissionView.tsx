@@ -45,7 +45,7 @@ export default function RoleInfoPermissionView(props: Props) {
           return (
             <div className="flex flex-row justify-center items-center">
               <IconButton
-                className="!text-gray-400 hover:!text-[var(--o-btn-primary-bg-hover-color)]"
+                className="!text-gray-400 hover:!text-(--o-btn-primary-bg-hover-color)"
                 onClick={async () => {
                   // const target = p.data
                   // const affected = p.api.getDisplayedRowAtIndex(p.rowIndex - 1).data
@@ -78,7 +78,7 @@ export default function RoleInfoPermissionView(props: Props) {
           return (
             <div className="flex flex-row justify-center items-center">
               <IconButton
-                className="!text-gray-400 hover:!text-[var(--o-btn-primary-bg-hover-color)]"
+                className="!text-gray-400 hover:!text-(--o-btn-primary-bg-hover-color)"
                 onClick={async () => {
                   // const target = p.data
                   // const affected = p.api.getDisplayedRowAtIndex(p.rowIndex + 1).data

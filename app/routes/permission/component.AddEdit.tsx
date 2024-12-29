@@ -33,7 +33,7 @@ type FetcherOutput = {
   }
 }
 
-export default function RoleAddEdit(props: Props) {
+export default function PermissionAddEdit(props: Props) {
   const setLoaderOverlay = useLoaderOverlayStore((state) => state.setLoaderOverlay)
   const fetcher = useFetcher<FetcherOutput>()
 

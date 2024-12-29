@@ -7,13 +7,10 @@ import {
   Scripts,
   ScrollRestoration,
 } from 'react-router'
-import { NextUIProvider } from '@nextui-org/react'
 import { Toaster } from 'sonner'
 
-import LoaderOverlay from '~/components/LoaderOverlay'
-
-import tailwindHref from '~/assets/styles/tailwind.css?url'
 import globalHref from '~/assets/styles/global.css?url'
+import LoaderOverlay from '~/components/LoaderOverlay'
 
 export const links: LinksFunction = () => [
   { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
@@ -26,8 +23,7 @@ export const links: LinksFunction = () => [
   //   rel: 'stylesheet',
   //   href: 'https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap',
   // },
-  { rel: 'stylesheet', href: tailwindHref },
-  { rel: 'stylesheet', href: globalHref },
+  { rel: 'stylesheet', href: globalHref, as: 'style' },
 ]
 
 export function Layout({ children }: { children: React.ReactNode }) {
@@ -40,13 +36,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body className="h-full">
-        <NextUIProvider className="h-full">
-          {children}
-          <Toaster richColors closeButton expand position="top-right" />
-          <LoaderOverlay />
-          <ScrollRestoration />
-          <Scripts />
-        </NextUIProvider>
+        {children}
+        <Toaster richColors closeButton expand position="top-right" />
+        <LoaderOverlay />
+        <ScrollRestoration />
+        <Scripts />
       </body>
     </html>
   )

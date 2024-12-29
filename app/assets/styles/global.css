@@ -1,27 +1,29 @@
+@import 'tailwindcss';
+
 :root {
-  --o-text-primary-color: theme(colors.pink.500);
+  --o-text-primary-color: var(--color-pink-500);
 
   --o-btn-primary-text-color: white;
-  --o-btn-primary-bg-color: theme(colors.pink.500);
-  --o-btn-primary-bg-hover-color: theme(colors.pink.400);
+  --o-btn-primary-bg-color: var(--color-pink-500);
+  --o-btn-primary-bg-hover-color: var(--color-pink-400);
 
-  --o-input-label-focus-color: theme(colors.pink.500);
-  --o-input-border-hover-color: theme(colors.pink.500);
-  --o-input-border-focus-color: theme(colors.pink.300);
+  --o-input-label-focus-color: var(--color-pink-500);
+  --o-input-border-hover-color: var(--color-pink-500);
+  --o-input-border-focus-color: var(--color-pink-300);
 
-  --o-btn-cancel-border-hover-color: theme(colors.pink.400);
+  --o-btn-cancel-border-hover-color: var(--color-pink-400);
 
-  --o-dialog-header-bg-color: theme(colors.pink.500);
-  --o-dialog-header-btn-close-text-color: theme(colors.gray.700);
-  --o-dialog-header-btn-close-bg-color: theme(colors.pink.100);
-  --o-dialog-header-btn-close-bg-hover-color: theme(colors.pink.300);
+  --o-dialog-header-bg-color: var(--color-pink-500);
+  --o-dialog-header-btn-close-text-color: var(--color-gray-700);
+  --o-dialog-header-btn-close-bg-color: var(--color-pink-100);
+  --o-dialog-header-btn-close-bg-hover-color: var(--color-pink-300);
 
-  --o-admin-menu-expanded-border-current-color: theme(colors.pink.300);
-  --o-admin-menu-item-bg-color: theme(colors.pink.50);
+  --o-admin-menu-expanded-border-current-color: var(--color-pink-300);
+  --o-admin-menu-item-bg-color: var(--colors-pink-50);
 
-  --o-btn-filter-text-hover-color: theme(colors.pink.400);
+  --o-btn-filter-text-hover-color: var(--color-pink-400);
 
-  --o-otp-ring-active-color: theme(colors.pink.400);
+  --o-otp-ring-active-color: var(--color-pink-400);
 }
 
 .spinner_Uvk8 {

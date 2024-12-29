@@ -1,56 +1,36 @@
 import { useEffect, useState } from 'react'
-import { useFetcher } from 'react-router'
+// @ts-ignore
+import { createPortal } from 'react-dom'
 import { Button, ListItemIcon, Menu, MenuItem } from '@mui/material'
-import { toast } from 'sonner'
 import { Icon } from '@iconify/react'
-import colors from 'tailwindcss/colors'
 
-import { Api } from '~/enums'
-import { useLoaderOverlayStore, useUserStore } from '~/stores'
+import { MUIBtnStyle } from '~/assets/styles/mui'
+import AddEdit from './component.AddEdit'
+import AddRelationPermission from '~/routes/role/component.AddRelationPermission'
 
-type FetcherOutput = {
-  errors?: {
-    server?: { title: string; message: string }
-  }
-}
-
-export default function UserMenu() {
+export default function PermissionAdd() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-  const fetcher = useFetcher<FetcherOutput>()
-  const setLoaderOverlay = useLoaderOverlayStore((state) => state.setLoaderOverlay)
-  const firstNameUser = useUserStore((state) => state.firstName)
+
+  const [isClient, setIsClient] = useState(false)
+  const [isDialogAddOpen, setIsDialogAddOpen] = useState(false)
+  const [isDialogAddRelationPermissionOpen, setIsDialogAddRelationPermissionOpen] = useState(false)
 
   useEffect(() => {
-    setLoaderOverlay(fetcher.state !== 'idle')
-    if (fetcher.state !== 'idle') {
-      return
-    }
-    /* ↓ Error de servidor */
-    if (fetcher.data?.errors?.server) {
-      toast.error(fetcher.data.errors.server.title, {
-        description: fetcher.data.errors.server.message || undefined,
-        duration: 5000,
-      })
-      return
-    }
-  }, [fetcher])
+    setIsClient(true)
+  }, [])
 
   return (
     <>
       <Button
-        sx={{
-          color: colors.gray[400],
-          '&:hover': {
-            color: 'white',
-          },
-        }}
-        startIcon={<Icon icon="mdi:account" width="100%" className="w-5" />}
-        endIcon={<Icon icon="mdi:chevron-down" width="100%" className="w-5" />}
+        type="button"
+        variant="contained"
+        size="small"
+        sx={MUIBtnStyle}
         onClick={(event: React.MouseEvent<HTMLElement>) => {
           setAnchorEl(event.currentTarget)
         }}
       >
-        {firstNameUser}
+        Agregar
       </Button>
       <Menu
         anchorEl={anchorEl}
@@ -91,19 +71,42 @@ export default function UserMenu() {
       >
         <MenuItem
           onClick={() => {
-            fetcher.submit(new FormData(), {
-              method: 'post',
-              action: Api.AUTH_SIGN_OUT,
-            })
+            setIsDialogAddOpen(true)
             setAnchorEl(null)
           }}
         >
           <ListItemIcon>
-            <Icon icon="mdi:logout" width="100%" className="w-5 text-gray-500" />
+            <Icon icon="mdi:lock" width="100%" className="w-5" />
           </ListItemIcon>
-          Cerrar sesión
+          Permiso
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            setIsDialogAddRelationPermissionOpen(true)
+            setAnchorEl(null)
+          }}
+        >
+          <ListItemIcon>
+            <Icon icon="mdi:card-account-details" width="100%" className="w-5" />
+          </ListItemIcon>
+          Asociación con rol
         </MenuItem>
       </Menu>
+
+      {isClient &&
+        createPortal(
+          <AddEdit type="add" isShow={isDialogAddOpen} close={() => setIsDialogAddOpen(false)} />,
+          document.querySelector('body')!,
+        )}
+
+      {isClient &&
+        createPortal(
+          <AddRelationPermission
+            isShow={isDialogAddRelationPermissionOpen}
+            close={() => setIsDialogAddRelationPermissionOpen(false)}
+          />,
+          document.querySelector('body')!,
+        )}
     </>
   )
 }

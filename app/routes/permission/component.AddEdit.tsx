@@ -18,7 +18,8 @@ type Props = {
   /* ↓ Para editar */
   data?: {
     id: string
-    title: string
+    path: string
+    type: string
   }
 }
 
@@ -27,7 +28,8 @@ type FetcherOutput = {
   errors?: {
     /* ▼ Error de validación */
     id?: string
-    title?: string
+    path?: string
+    type?: string
     /* ▲ Error de validación */
     server?: { title: string; message: string }
   }
@@ -39,12 +41,18 @@ export default function PermissionAddEdit(props: Props) {
 
   const [title, setTitle] = useState<string>('')
   const [titleErrMsg, setTitleErrMsg] = useState<string>('')
+  const [path, setPath] = useState<string>('')
+  const [pathErrMsg, setPathErrMsg] = useState<string>('')
+  const [type, setType] = useState<string>('')
+  const [typeErrMsg, setTypeErrMsg] = useState<string>('')
 
   useEffect(() => {
     /* ↓ Para editar */
     if (props.data && Object.keys(props.data).length > 0) {
-      setTitle(props.data.title ?? '')
-      setTitleErrMsg('')
+      setPath(props.data.path ?? '')
+      setPathErrMsg('')
+      setType(props.data.type ?? '')
+      setTypeErrMsg('')
     }
   }, [props.data])
 
@@ -55,9 +63,10 @@ export default function PermissionAddEdit(props: Props) {
     }
     /* ↓ Errores de formulario */
     if (fetcher.data?.errors && fetcher.data.errors.server === undefined) {
-      setTitleErrMsg(fetcher.data.errors.title ?? '')
+      setPathErrMsg(fetcher.data.errors.path ?? '')
+      setTypeErrMsg(fetcher.data.errors.type ?? '')
       toast.error(ErrorTitle.FORM_GENERIC, {
-        description: `Por favor corrige el formulario para ${props.type === 'add' ? 'agregar un nuevo' : 'editar un'} rol.`,
+        description: `Por favor corrige el formulario para ${props.type === 'add' ? 'agregar un nuevo' : 'editar un'} permiso.`,
         duration: 5000,
       })
       return
@@ -78,7 +87,7 @@ export default function PermissionAddEdit(props: Props) {
   return (
     <Overlay type="dialog" width="max-w-[500px]" isActive={props.isShow}>
       <Dialog
-        title={props.type === 'add' ? 'Nuevo rol' : 'Edición de rol'}
+        title={props.type === 'add' ? 'Nuevo permiso' : 'Edición de permiso'}
         close={props.close}
         footer={
           <>
@@ -142,22 +151,22 @@ export default function PermissionAddEdit(props: Props) {
       >
         <div className="space-y-4 mb-8">
           <p className="">
-            A continuación puedes {props.type === 'add' ? 'agregar' : 'editar'} un rol.
+            A continuación puedes {props.type === 'add' ? 'agregar' : 'editar'} un permiso.
           </p>
           <p className="text-sm text-gray-400">(*) Campos obligatorios.</p>
         </div>
-        <div className="space-y-4">
+        <div className="!space-y-4">
           <TextField
-            name="title"
+            name="path"
             type="text"
-            label="Nombre del rol*"
+            label="Ruta*"
             fullWidth
             sx={MUITextFieldStyle}
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            error={titleErrMsg ? true : false}
-            helperText={titleErrMsg}
-            onFocus={() => setTitleErrMsg('')}
+            value={path}
+            onChange={(e) => setPath(e.target.value)}
+            error={pathErrMsg ? true : false}
+            helperText={pathErrMsg}
+            onFocus={() => setPathErrMsg('')}
           />
         </div>
       </Dialog>

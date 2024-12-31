@@ -5,6 +5,7 @@ import { Button } from '@mui/material'
 import { toast } from 'sonner'
 
 import { Api, General, Page } from '~/enums'
+import { MUIBtnStyle } from '~/assets/styles/mui'
 import { useIsCodeSentStore, useLoaderOverlayStore } from '~/stores'
 import { cn } from '~/utils/cn'
 import { authCodeValidation } from './validation.code'
@@ -132,14 +133,7 @@ export default function AuthCodeRoute() {
             variant="contained"
             size="large"
             fullWidth
-            sx={{
-              fontWeight: 'bold',
-              backgroundColor: 'var(--o-btn-primary-bg-color)',
-              color: 'var(--o-btn-primary-text-color)',
-              '&:hover': {
-                backgroundColor: 'var(--o-btn-primary-bg-hover-color)',
-              },
-            }}
+            sx={MUIBtnStyle}
             onClick={(e) => {
               const validation = authCodeValidation({ timeLimit, code })
               if (Object.keys(validation.errors).length > 0) {

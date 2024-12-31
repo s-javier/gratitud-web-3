@@ -6,34 +6,34 @@ export const MUITextFieldStyle = {
       borderColor: colors.gray[400],
     },
     '&:hover fieldset': {
-      borderColor: 'var(--o-input-border-hover-color)',
+      borderColor: colors.pink[500],
     },
     '&.Mui-focused fieldset': {
-      borderColor: 'var(--o-input-border-focus-color)',
+      borderColor: colors.pink[300],
     },
   },
   'label.Mui-focused': {
-    color: 'var(--o-input-label-focus-color)',
+    color: colors.pink[500],
   },
 }
 
 export const MUIBtnStyle = {
   fontWeight: 'bold',
-  backgroundColor: 'var(--o-btn-primary-bg-color)',
-  color: 'var(--o-btn-primary-text-color)',
+  backgroundColor: colors.pink[500],
+  color: 'white',
   '&:hover': {
-    backgroundColor: 'var(--o-btn-primary-bg-hover-color)',
+    backgroundColor: colors.pink[400],
   },
 }
 
 export const MUISwitchStyle = {
   // Color del switch cuando está activo
   '& .MuiSwitch-switchBase.Mui-checked': {
-    color: 'var(--o-btn-primary-bg-color)',
+    color: colors.pink[500],
   },
   // Color del track cuando está activo
   '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
-    backgroundColor: 'var(--o-btn-primary-bg-color)',
+    backgroundColor: colors.pink[500],
   },
   // // Color del switch cuando está inactivo
   // '& .MuiSwitch-switchBase': {

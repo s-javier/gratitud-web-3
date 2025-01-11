@@ -1,10 +1,20 @@
 import { useEffect, useState } from 'react'
-// import { IconButton } from '@suid/material'
+import { Link } from 'react-router'
+import {
+  Box,
+  Drawer,
+  IconButton,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+} from '@mui/material'
 import { Icon } from '@iconify/react'
 
 // import { $loaderBar } from '~/stores'
-import Overlay from '~/components/Overlay'
 import { cn } from '~/utils/cn'
+import colors from 'tailwindcss/colors'
 
 export default function AdminMenu(props: {
   menu: any[]
@@ -54,7 +64,7 @@ export default function AdminMenu(props: {
       }
     }
     setPages(groupedData)
-  })
+  }, [props.menu])
 
   // @ts-ignore
   const toggleItem = (name, isRelationWithCurrentPath) => {
@@ -78,101 +88,41 @@ export default function AdminMenu(props: {
 
   return (
     <>
-      {/* <IconButton
-        className="!text-gray-400 hover:!text-white"
+      <IconButton
+        sx={{
+          color: colors.gray[400],
+          '&:hover': {
+            color: 'white',
+          },
+        }}
+        aria-label="plus"
         onClick={() => setIsOpen(true)}
-        aria-label="menu"
       >
         <Icon icon="mdi:menu" width="100%" className="w-6" />
-      </IconButton> */}
-      <Overlay
-        type="sidebar"
-        width="!w-[350px]"
-        isActive={isOpen}
-        zIndex="z-[1400]"
-        close={() => setIsOpen(false)}
-        panelTitle={props.organizations.filter((item: any) => item.isSelected)[0].title}
-      >
-        <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-white">
-          <nav className="flex flex-1 flex-col">
-            <ul role="list" className="flex flex-1 flex-col gap-y-7">
-              <li>
-                <ul role="list" className="space-y-1">
-                  {pages.map((item: any) => (
-                    <li key={item.path}>
-                      {!item.children ? (
-                        <a
-                          href={item.path}
-                          className={cn(
-                            props.currentPath === item.path && 'bg-[--o-admin-menu-item-bg-color]',
-                            props.currentPath !== item.path && 'hover:bg-gray-50',
-                            'group flex gap-x-3 rounded-md p-2 text-sm font-semibold',
-                            'leading-6 text-gray-700',
-                          )}
-                          onClick={activeLoaderBar}
-                        >
-                          <Icon icon={item.icon} width="100%" className="w-5 text-gray-400" />
-                          {item.title}
-                        </a>
-                      ) : (
-                        <div>
-                          <button
-                            onClick={() =>
-                              toggleItem(item.menuTitle, props.currentPath.includes(item.prefix))
-                            }
-                            className={cn(
-                              // props.currentPath.includes(item.prefix) && 'bg-yellow-50',
-                              // !props.currentPath.includes(item.prefix) && 'hover:bg-yellow-50',
-                              'group flex w-full items-center gap-x-3 rounded-md p-2',
-                              'text-left text-sm font-semibold leading-6 text-gray-700',
-                            )}
-                          >
-                            <Icon icon={item.menuIcon} width="100%" className="w-5 text-gray-400" />
-                            {item.menuTitle}
-                            <Icon
-                              icon="mdi:chevron-right"
-                              width="100%"
-                              className={cn(
-                                'ml-auto h-5 w-5 shrink-0 text-gray-400 transition-transform',
-                                (openItems()[item.menuTitle] ||
-                                  (openItems()[item.menuTitle] === undefined &&
-                                    props.currentPath.includes(item.prefix))) &&
-                                  'rotate-90 text-gray-500',
-                              )}
-                            />
-                          </button>
-                          {openItems()[item.menuTitle] ||
-                            (openItems()[item.menuTitle] === undefined &&
-                              props.currentPath.includes(item.prefix) && (
-                                <ul className="mt-1 px-2">
-                                  {item.children.map((subItem: any) => (
-                                    <li key={subItem.path}>
-                                      <a
-                                        href={subItem.path}
-                                        className={cn(
-                                          props.currentPath === subItem.path &&
-                                            'bg-[--o-admin-menu-item-bg-color]',
-                                          props.currentPath !== subItem.path && 'hover:bg-gray-50',
-                                          'block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700',
-                                        )}
-                                        onClick={activeLoaderBar}
-                                      >
-                                        {subItem.menuTitle}
-                                      </a>
-                                    </li>
-                                  ))}
-                                </ul>
-                              ))}
-                        </div>
-                      )}
-                    </li>
-                  ))}
-                </ul>
-              </li>
-            </ul>
-          </nav>
-        </div>
-      </Overlay>
+      </IconButton>
+      <Drawer open={isOpen} onClose={() => setIsOpen(!isOpen)}>
+        <Box
+          component="div"
+          sx={{ width: 250 }}
+          role="presentation"
+          onClick={(value) => setIsOpen(!isOpen)}
+        >
+          <List>
+            {pages.map((item, index) => (
+              <ListItem key={item.path} disablePadding>
+                <ListItemButton component={Link} to={item.path}>
+                  <ListItemIcon>
+                    <Icon icon={item.icon} width="100%" className="w-5 text-gray-400" />
+                  </ListItemIcon>
+                  <ListItemText primary={item.title} />
+                </ListItemButton>
+              </ListItem>
+            ))}
+          </List>
+        </Box>
+      </Drawer>
+      {/* panelTitle={props.organizations.filter((item: any) => item.isSelected)[0].title} */}
+      {/* props.currentPath === item.path */}
     </>
   )
 }

@@ -7,6 +7,7 @@ import Logo from '~/components/svg/Logo'
 import UserMenu from '~/routes/admin/component.UserMenu'
 import { ReactNode } from 'react'
 import OrganizationsMenu from './component.OrganizationsMenu'
+import AdminMenu from './component.AdminMenu'
 
 export default function AdminHeader(props: { title: ReactNode; buttons: ReactNode }) {
   const location = useLocation()
@@ -26,24 +27,20 @@ export default function AdminHeader(props: { title: ReactNode; buttons: ReactNod
               <div className="flex items-center">
                 <div className="lg:hidden">
                   {/* Mobile menu button */}
-                  {/* <AdminMenu
-                      client:only="solid-js"
-                      menu={Astro.locals.menu ?? []}
-                      currentPath={Astro.url.pathname}
-                      organizations={Astro.locals.organizations}
-                    /> */}
+                  <AdminMenu
+                    menu={user.menu}
+                    currentPath={location.pathname}
+                    organizations={user.organizationsToChange}
+                  />
                 </div>
                 <div className="hidden lg:block">
-                  {
-                    // menu.length >= 6 && (
-                    //   <AdminMenu
-                    //     client:only="solid-js"
-                    //     menu={Astro.locals.menu ?? []}
-                    //     currentPath={Astro.url.pathname}
-                    //     organizations={Astro.locals.organizations}
-                    //   />
-                    // )
-                  }
+                  {user.menu.length >= 6 && (
+                    <AdminMenu
+                      menu={user.menu}
+                      currentPath={location.pathname}
+                      organizations={user.organizationsToChange}
+                    />
+                  )}
                 </div>
                 <a href="/admin/welcome" className="o-page ml-2">
                   <Logo className="w-[160px]" />
